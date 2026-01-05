@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Metropolis:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.glow-effect {
+  box-shadow: 0 0 60px -10px rgba(74, 222, 128, 0.5);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+}
+
+html {
+  scroll-behavior: smooth;
+}
