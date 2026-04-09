@@ -59,38 +59,43 @@ export function SmoothCursor({ springConfig }) {
 
   return (
     <>
-      <Pointer>
+      <Pointer glowSize={0} glowOpacity={0}>
         <motion.div
           style={{
-            width: isHovering ? 60 : 40,
-            height: isHovering ? 60 : 40,
-            borderRadius: "50%",
-            border: "2px solid rgba(74, 222, 128, 0.5)",
-            backgroundColor: isHovering ? "rgba(74, 222, 128, 0.1)" : "transparent",
+            position: "relative",
+            width: 24,
+            height: 24,
           }}
-          animate={{
-            scale: isPointerDown ? 0.8 : 1,
-          }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          animate={{ scale: isPointerDown ? 0.92 : 1 }}
+          transition={{ type: "spring", stiffness: 520, damping: 32 }}
         >
-          <motion.div
+          {/* pointer styled like provided design */}
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
             style={{
               position: "absolute",
-              top: "50%",
-              left: "50%",
-              translateX: "-50%",
-              translateY: "-50%",
-              width: isHovering ? 12 : 8,
-              height: isHovering ? 12 : 8,
-              borderRadius: "50%",
-              backgroundColor: "#4ade80",
+              left: 1,
+              top: 0,
+              transform: "rotate(-135deg)",
+              transformOrigin: "16px 16px",
+              willChange: "transform",
             }}
-            animate={{
-              scale: isPointerDown ? 0.5 : 1,
-              opacity: isHovering ? 0.8 : 1,
-            }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          />
+          >
+            {/* same shape as provided image (filled green) */}
+            <path
+              d="M3 7.5C3 7.1 3.22 6.73 3.57 6.55C3.91 6.37 4.33 6.41 4.63 6.66L29.6 14.66C29.98 14.98 30.06 15.54 29.78 15.96C29.68 16.11 29.54 16.23 29.38 16.3L4.63 24.34C4.33 24.59 3.91 24.63 3.57 24.45C3.22 24.27 3 23.9 3 23.5V18.2L12.6 16L3 13.8V7.5Z"
+              fill="#4ade80"
+            />
+            <path
+              d="M12.6 16L3 13.8V11.4L25.2 15.2L12.6 16Z"
+              fill="#38c56a"
+              opacity="0.55"
+            />
+          </svg>
         </motion.div>
       </Pointer>
     </>
