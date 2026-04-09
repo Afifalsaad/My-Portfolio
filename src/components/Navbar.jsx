@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AnimatedThemeToggler } from './AnimatedThemeToggler';
 
-const Navbar = ({ darkMode, toggleDarkMode }) => {
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -55,49 +56,44 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         </button>
         
         <div className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">Home</Link>
-          <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors">About</Link>
+          <Link to="/" className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg">Home</Link>
+          <Link to="/about" className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg">About</Link>
           <button 
                         onClick={() => scrollToSection('about')}
-                        className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors"
+                        className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg"
                       >
                         Services
                       </button>
           <button 
                         onClick={() => scrollToSection('portfolio')}
-                        className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors"
+                        className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg"
                       >
                         Portfolio
                       </button>
           <button 
                         onClick={() => scrollToSection('contact')}
-                        className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors"
+                        className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg"
                       >
                         Contact
                       </button>
         </div>
         
         <div className="flex items-center space-x-4">
-          <button 
-            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
-            onClick={toggleDarkMode}
-          >
-            {darkMode ? <span className="material-symbols-outlined text-sm">light_mode</span> : <span className="material-symbols-outlined text-sm">dark_mode</span>}
-          </button>
+          <AnimatedThemeToggler />
         </div>
       </nav>
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="fixed top-16 left-6 w-2/5 max-w-[200px] z-40 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg py-4 transition-all duration-300">
           <div className="flex flex-col space-y-2 px-4">
-            <Link to="/" className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link to="/about" className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => setIsMenuOpen(false)}>About</Link>
+            <Link to="/" className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg" onClick={() => setIsMenuOpen(false)}>Home</Link>
+            <Link to="/about" className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg" onClick={() => setIsMenuOpen(false)}>About</Link>
             <button 
                           onClick={() => {
                             scrollToSection('about');
                             setIsMenuOpen(false);
                           }}
-                          className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                          className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg"
                         >
                           Services
                         </button>
@@ -106,7 +102,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                             scrollToSection('portfolio');
                             setIsMenuOpen(false);
                           }}
-                          className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                          className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg"
                         >
                           Portfolio
                         </button>
@@ -115,7 +111,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                             scrollToSection('contact');
                             setIsMenuOpen(false);
                           }}
-                          className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                          className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg"
                         >
                           Contact
                         </button>

@@ -16,3 +16,29 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* View Transitions API for theme toggler */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Hide default browser cursor */
+* {
+  cursor: none !important;
+}
+
+/* Keep text cursor for inputs */
+input,
+textarea,
+select {
+  cursor: none !important;
+}
+
+a,
+button,
+[role="button"],
+[onclick] {
+  cursor: none !important;
+}

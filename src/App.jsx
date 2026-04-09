@@ -13,39 +13,15 @@ import Footer from './components/Footer';
 import GarmentsMasterPage from './components/GarmentsMasterPage';
 import EarthCleanPage from './components/EarthCleanPage';
 import SkillSwapPage from './components/SkillSwapPage';
+import { SmoothCursor } from './components/SmoothCursor';
 
 function App() {
-  const [darkMode, setDarkMode] = useState(true);
-
-  useEffect(() => {
-    // Check for saved theme preference or system preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setDarkMode(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setDarkMode(false);
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  };
-
   return (
     <Router>
       <div 
-        className="font-body bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 min-h-screen relative overflow-x-hidden transition-colors duration-300"
+        className="font-body bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 min-h-screen relative overflow-x-hidden transition-colors duration-300 cursor-none"
       >
+        <SmoothCursor />
         <Routes>
           {/* Home Route with all sections */}
           <Route 
@@ -59,7 +35,7 @@ function App() {
               >
                 <div className="fixed inset-0 z-0 pointer-events-none opacity-10 dark:opacity-20 bg-stars bg-cover bg-center mix-blend-screen"></div>
                 <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent via-background-light/80 to-background-light dark:via-background-dark/80 dark:to-background-dark"></div>
-                <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+                <Navbar />
                 <main className="relative z-10 container mx-auto px-6 md:px-12 flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16 sm:pt-16 md:pt-20">
                   <motion.div
                     initial={{ y: 20, opacity: 0 }}
