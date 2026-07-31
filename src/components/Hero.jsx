@@ -1,81 +1,146 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const Hero = () => {
-  const titleRef = useRef();
-  const subtitleRef = useRef();
-  const descriptionRef = useRef();
-  const buttonRef = useRef();
-  const imageRef = useRef();
-  const borderRef = useRef();
+  const firstPart = "Hii, I'm";
+  const namePart = " Afif Al Saad";
+  const [showCursor, setShowCursor] = useState(true);
+
+
+  const TYPING_SPEED = 0.2;
+  const START_DELAY = 0.5; 
 
   useEffect(() => {
-    // Animate elements when component mounts
-    gsap.fromTo(
-      titleRef.current,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.3 }
-    );
+    const totalChars = firstPart.length + namePart.length;
+    const totalTypingTime = (totalChars * TYPING_SPEED + START_DELAY) * 1000;
 
-    gsap.fromTo(
-      subtitleRef.current,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.5 }
-    );
 
-    gsap.fromTo(
-      descriptionRef.current,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.7 }
-    );
+    const timer = setTimeout(() => {
+      setShowCursor(false);
+    }, totalTypingTime + 800);
 
-    gsap.fromTo(
-      buttonRef.current,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.9 }
-    );
+    return () => clearTimeout(timer);
+  }, [TYPING_SPEED, START_DELAY]);
 
-    gsap.fromTo(
-      imageRef.current,
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 1, delay: 0.4, ease: "power3.out" }
-    );
+  // Typewriter container variant
+  const sentence = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: TYPING_SPEED,
+        delayChildren: START_DELAY,
+      },
+    },
+  };
 
-    // Animate the rotating border
-    gsap.to(borderRef.current, {
-      rotation: 360,
-      duration: 10,
-      ease: "none",
-      repeat: -1,
-      transformOrigin: "center",
-    });
-  }, []);
+  // Typewriter character variant
+  const letter = {
+    hidden: { opacity: 0, display: "none" },
+    visible: {
+      opacity: 1,
+      display: "inline",
+    },
+  };
+
+  // Animation variants for other elements rising from the bottom (fadeUp)
+  const slideUp = {
+    hidden: { opacity: 0, y: 25 },
+    visible: (customDelay) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        delay: customDelay,
+      },
+    }),
+  };
+
+  const imageReveal = {
+    hidden: { opacity: 0, scale: 0.88, y: 20 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        delay: 0.3,
+      },
+    },
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-8">
+      {/* Text Info */}
       <div className="order-2 lg:order-1 space-y-4">
-        <span
-          ref={subtitleRef}
-          className="hero-subtitle inline-block text-xs md:text-sm font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase">
+        {/* Subtitle */}
+        <motion.span
+          variants={slideUp}
+          initial="hidden"
+          animate="visible"
+          custom={0.1}
+          className="inline-block text-xs md:text-sm font-semibold tracking-[0.2em] text-gray-500 dark:text-gray-400 uppercase">
           MERN Stack Developer
-        </span>
-        <h1
-          ref={titleRef}
-          className="hero-title text-2xl md:text-4xl lg:text-5xl font-bold leading-tight">
-          Hello, I'm{" "}
-          <span className="text-primary text-glow">Afif Al Saad</span>
-        </h1>
-        <p
-          ref={descriptionRef}
-          className="hero-description text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed">
+        </motion.span>
+
+        {/* Typewriter Title */}
+        <motion.h1
+          variants={sentence}
+          initial="hidden"
+          animate="visible"
+          className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight select-none">
+          {firstPart.split("").map((char, index) => (
+            <motion.span key={`first-${index}`} variants={letter}>
+              {char}
+            </motion.span>
+          ))}
+          <span className="text-primary text-glow">
+            {namePart.split("").map((char, index) => (
+              <motion.span key={`name-${index}`} variants={letter}>
+                {char}
+              </motion.span>
+            ))}
+          </span>
+          {/* Blinking Cursor with smooth hide out */}
+          <motion.span
+            animate={showCursor ? { opacity: [1, 1, 0, 0, 1] } : { opacity: 0 }}
+            transition={
+              showCursor
+                ? {
+                    duration: 0.8,
+                    repeat: Infinity,
+                    times: [0, 0.49, 0.5, 0.99, 1],
+                    ease: "linear",
+                  }
+                : { duration: 0.4, ease: "easeOut" }
+            }
+            className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 translate-y-[0.1em]"
+          />
+        </motion.h1>
+
+        {/* Description */}
+        <motion.p
+          variants={slideUp}
+          initial="hidden"
+          animate="visible"
+          custom={0.5}
+          className="text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-xl leading-relaxed">
           I build accessible, pixel-perfect, and performant web applications.
           Let's turn your digital vision into reality with clean code and modern
           design.
-        </p>
-        <div className="flex flex-wrap items-center gap-4 pt-4">
+        </motion.p>
+
+        {/* Buttons & Social Icons */}
+        <motion.div
+          variants={slideUp}
+          initial="hidden"
+          animate="visible"
+          custom={0.7}
+          className="flex flex-wrap items-center gap-4 pt-4">
           <a
-            ref={buttonRef}
-            className="hero-button px-8 py-3 rounded-full border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(74,222,128,0.3)] hover:shadow-[0_0_25px_rgba(74,222,128,0.6)]"
+            className="px-8 py-3 rounded-full border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(74,222,128,0.3)] hover:shadow-[0_0_25px_rgba(74,222,128,0.6)]"
             href="#">
             Hire me
           </a>
@@ -114,21 +179,28 @@ const Hero = () => {
               </svg>
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Image Profile */}
       <div className="order-1 lg:order-2 flex justify-center lg:justify-end relative">
-        <div
-          ref={imageRef}
-          className="hero-image relative w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 rounded-full p-2 border border-primary/30 glow-effect">
-          <div
-            ref={borderRef}
-            className="border-rotate absolute inset-0 rounded-full border-t-2 border-primary"></div>
+        <motion.div
+          variants={imageReveal}
+          initial="hidden"
+          animate="visible"
+          className="relative w-40 h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 rounded-full p-2 border border-primary/30 glow-effect">
+          {/* Rotating Border */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0 rounded-full border-t-2 border-primary"
+          />
           <img
             alt="Afif Al Saad Professional Portrait"
-            className="w-full h-full object-cover rounded-full border-4 border-gray-900 dark:border-black relative z-10 transition-all duration-500"
+            className="w-full h-full object-cover rounded-full border-4 border-gray-900 dark:border-black relative z-10"
             src="/hero-image.png"
           />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

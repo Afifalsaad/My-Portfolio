@@ -17,7 +17,7 @@ const GarmentsMasterPage = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 pt-24 pb-16 relative overflow-x-hidden"
+      className="min-h-screen bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 py-6 relative overflow-x-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}

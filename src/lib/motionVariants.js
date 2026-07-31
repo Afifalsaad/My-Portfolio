@@ -1,75 +1,76 @@
 // ─── Performance-first Framer Motion Variants ────────────────────────────────
-// শুধু GPU-accelerated properties ব্যবহার করা হয়েছে:
-// opacity, translateX, translateY, scale — এগুলো compositor thread-এ চলে, main thread block করে না।
-// ❌ এড়ানো হয়েছে: filter:blur, rotateX/Y (3D), বড় scale range, originX/Y
+// All variants translate from bottom to top (positive y -> 0)
+// as requested: "scroll korar sathe sathe jeno niche theke ashe"
 
-// ── Entry Transition Config ───────────────────────────────────────────────────
-const easeOut = [0.25, 0.46, 0.45, 0.94]; // custom cubic-bezier — smooth easeOut
-const DURATION = 0.55; // সব animation এর standard duration
+const easeOut = [0.25, 0.46, 0.45, 0.94]; // smooth easeOut
+const DURATION = 0.55; 
 
 export const fadeUp = {
-  hidden:  { opacity: 0, y: 36 },
+  hidden:  { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: DURATION, ease: easeOut } },
 };
 
+// Formerly fadeDown, now animates from bottom (y: 35) with a slight overshoot ease
 export const fadeDown = {
-  hidden:  { opacity: 0, y: -36 },
+  hidden:  { opacity: 0, y: 35 },
   visible: { opacity: 1, y: 0, transition: { duration: DURATION, ease: easeOut } },
 };
 
+// Formerly fadeLeft, now slides from bottom (y: 45)
 export const fadeLeft = {
-  hidden:  { opacity: 0, x: -50 },
-  visible: { opacity: 1, x: 0,  transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 45 },
+  visible: { opacity: 1, y: 0,  transition: { duration: DURATION, ease: easeOut } },
 };
 
+// Formerly fadeRight, now slides from bottom (y: 45)
 export const fadeRight = {
-  hidden:  { opacity: 0, x: 50 },
-  visible: { opacity: 1, x: 0,  transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 45 },
+  visible: { opacity: 1, y: 0,  transition: { duration: DURATION, ease: easeOut } },
 };
 
-// scale শুধু 0.88 → 1 — ছোট range = কম compositing cost
+// scale + bottom translation (y: 30)
 export const zoomIn = {
-  hidden:  { opacity: 0, scale: 0.88 },
-  visible: { opacity: 1, scale: 1, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 30, scale: 0.9 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// হালকা rotate — শুধু 2D, GPU safe
+// rotate + bottom translation (y: 32)
 export const rotateIn = {
-  hidden:  { opacity: 0, rotate: -8, scale: 0.92 },
-  visible: { opacity: 1, rotate: 0,  scale: 1, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 32, rotate: -4, scale: 0.95 },
+  visible: { opacity: 1, y: 0, rotate: 0,  scale: 1, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// ডান থেকে ঘুরে আসে — 2D rotate only
+// rotate + bottom translation (y: 32)
 export const rotateInRight = {
-  hidden:  { opacity: 0, rotate: 8, scale: 0.92 },
-  visible: { opacity: 1, rotate: 0, scale: 1, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 32, rotate: 4, scale: 0.95 },
+  visible: { opacity: 1, y: 0, rotate: 0, scale: 1, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// নিচ থেকে + হালকা scale — natural feel
+// popUp (y: 28 + scale: 0.94)
 export const popUp = {
   hidden:  { opacity: 0, y: 28, scale: 0.94 },
   visible: { opacity: 1, y: 0,  scale: 1, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// উপর থেকে নামে — header/title এর জন্য ভালো
+// Formerly dropDown, now bottom translation (y: 30)
 export const dropDown = {
-  hidden:  { opacity: 0, y: -28, scale: 0.96 },
+  hidden:  { opacity: 0, y: 30, scale: 0.96 },
   visible: { opacity: 1, y: 0,   scale: 1, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// বাম থেকে + ছোট rotate — card এর জন্য ভালো লাগে
+// Formerly slideRotateLeft, now bottom translation + tilt (y: 36)
 export const slideRotateLeft = {
-  hidden:  { opacity: 0, x: -40, rotate: -4 },
-  visible: { opacity: 1, x: 0,   rotate: 0, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 36, rotate: -2 },
+  visible: { opacity: 1, y: 0,   rotate: 0, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// ডান থেকে + ছোট rotate
+// Formerly slideRotateRight, now bottom translation + tilt (y: 36)
 export const slideRotateRight = {
-  hidden:  { opacity: 0, x: 40, rotate: 4 },
-  visible: { opacity: 1, x: 0,  rotate: 0, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 36, rotate: 2 },
+  visible: { opacity: 1, y: 0,  rotate: 0, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// Spring bounce — stiffness/damping calibrated যাতে overshoot বেশি না হয়
+// Spring bounce from bottom (y: 40)
 export const springUp = {
   hidden:  { opacity: 0, y: 40, scale: 0.92 },
   visible: {
@@ -79,7 +80,6 @@ export const springUp = {
 };
 
 // ── Stagger Container ─────────────────────────────────────────────────────────
-// delayChildren কমিয়ে রাখা হয়েছে — দ্রুত শুরু হয়
 export function staggerContainer(staggerChildren = 0.1, delayChildren = 0.05) {
   return {
     hidden: {},
@@ -90,11 +90,9 @@ export function staggerContainer(staggerChildren = 0.1, delayChildren = 0.05) {
 }
 
 // ── Viewport Settings ─────────────────────────────────────────────────────────
-// once: true — বারবার re-animate করে না, performance ভালো থাকে
-// amount: 0.15 — মাত্র ১৫% দেখা গেলেই trigger হয় — scroll করার সাথে সাথেই animation শুরু হয়
 export const defaultViewport = { once: true, amount: 0.15 };
 
-// ── Whimsy Variants Array (for index-based random picking) ───────────────────
+// ── Cards/Items Variants Array ───────────────────────────────────────────────
 export const CARD_VARIANTS = [
   fadeUp,
   fadeLeft,
