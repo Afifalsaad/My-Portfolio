@@ -80,7 +80,7 @@ export function SmoothCursor({ springConfig = {} }) {
   return (
     <>
       {/* Smooth trailing circle */}
-      <motion.div
+      {/* <motion.div
         aria-hidden="true"
         className="pointer-events-none fixed left-0 top-0 z-[9998] hidden md:flex"
         style={{
@@ -113,7 +113,7 @@ export function SmoothCursor({ springConfig = {} }) {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
           <span className="h-1 w-1 rounded-full bg-cyan-100 shadow-[0_0_8px_#a5f3fc]" />
         </motion.div>
-      </motion.div>
+      </motion.div> */}
 
       {/* Real mouse pointer */}
       <motion.div

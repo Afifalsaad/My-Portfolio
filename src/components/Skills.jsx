@@ -213,8 +213,8 @@ const Skills = () => {
   return (
     <section
       id="skills"
-      className="relative z-10 border-t border-slate-200/50 pb-24 pt-20 dark:border-zinc-800/50">
-      <div className="container mx-auto px-4">
+      className="relative z-10 border-t border-slate-200/50 pb-16 pt-12 sm:pb-24 sm:pt-20 dark:border-zinc-800/50">
+      <div className="container mx-auto px-0 md:px-2">
         {/* ── Section Header ── */}
         <motion.div
           className="mx-auto mb-16 max-w-3xl text-center"
@@ -255,7 +255,7 @@ const Skills = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={[
-                "relative flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-semibold transition-all duration-200",
+                "relative flex items-center gap-1.5 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold transition-all duration-200",
                 activeFilter === filter
                   ? "bg-slate-200 text-slate-900 dark:bg-zinc-100 dark:text-zinc-900"
                   : "border border-white/5 bg-slate-900/20 text-slate-400 hover:bg-slate-900/40 hover:text-slate-200 dark:bg-zinc-900/20 dark:hover:bg-zinc-900/40",
@@ -276,7 +276,7 @@ const Skills = () => {
 
         {/* ── Stats Summary Row ── */}
         <motion.div
-          className="mx-auto mb-2 flex max-w-2xl justify-around gap-6 text-center"
+          className="mx-auto mb-2 flex flex-wrap justify-center gap-4 sm:gap-6 sm:justify-around max-w-2xl text-center"
           variants={staggerContainer(0.12, 0.1)}
           initial="hidden"
           whileInView="visible"
@@ -363,7 +363,7 @@ const Skills = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeFilter}
-              className="grid grid-cols-2 gap-x-12 gap-y-1 md:grid-cols-3"
+              className="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-2 sm:gap-x-8 md:grid-cols-3 md:gap-x-12 lg:grid-cols-4"
               variants={staggerContainer(0.04, 0.02)}
               initial="hidden"
               animate="visible">
@@ -371,29 +371,23 @@ const Skills = () => {
                 <motion.div
                   key={skill.slug}
                   variants={getVariantByIndex(index)}
-                  className="group flex cursor-none select-none items-center gap-6 p-8 transition-colors duration-300 hover:border-slate-100/30">
-                  {/* Item Number */}
-                  <span className="w-8 select-none font-mono text-xl font-semibold opacity-25 transition-opacity duration-300 group-hover:opacity-60" />
-
+                  className="group grid w-full cursor-none select-none grid-cols-[24px_minmax(0,120px)] items-center justify-center gap-3 py-6 transition-colors duration-300  sm:gap-6 lg:px-0">
                   {/* Tech Logo */}
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105">
                     <img
                       src={`https://cdn.simpleicons.org/${skill.slug}`}
                       alt={skill.name}
-                      className="h-6 w-6 object-contain saturate-[0.8] transition-all duration-300 group-hover:saturate-100"
-                      loading="lazy"
-                      onError={(event) => {
-                        event.currentTarget.style.display = "none";
-                      }}
+                      className="h-6 w-6"
                     />
                   </div>
 
                   {/* Tech Title */}
-                  <div>
+                  <div className="min-w-0">
                     <h3
                       onMouseEnter={() => setHoveredSkill(skill)}
                       onMouseLeave={() => setHoveredSkill(null)}
-                      className="truncate text-lg font-bold tracking-tight text-slate-300 transition-colors duration-200 group-hover:text-white dark:text-zinc-200 md:text-xl">
+                      title={skill.name}
+                      className="w-full truncate text-left text-base font-bold tracking-tight text-slate-300 transition-colors duration-200 hover:cursor-pointer group-hover:text-white dark:text-zinc-200 sm:text-lg md:text-xl">
                       {skill.name}
                     </h3>
                   </div>

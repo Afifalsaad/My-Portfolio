@@ -49,7 +49,7 @@ const Navbar = () => {
           : 'bg-transparent'
       }`}>
         <button 
-          className="w-12 h-12 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors"
+          className=" h-12 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <span className="material-symbols-outlined">close</span> : <span className="material-symbols-outlined">menu</span>}

@@ -49,7 +49,7 @@ function App() {
                 <div className="fixed inset-0 z-0 pointer-events-none opacity-10 dark:opacity-20 bg-stars bg-cover bg-center mix-blend-screen"></div>
                 <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent via-background-light/80 to-background-light dark:via-background-dark/80 dark:to-background-dark"></div>
                 <Navbar />
-                <main className="relative z-10 container mx-auto px-6 md:px-12 flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16 sm:pt-16 md:pt-20">
+                <main className="relative z-10 container mx-auto px-6 lg:px-12 flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16 sm:pt-16 md:pt-20 ">
                   {/* Hero — page load এ animate, scroll trigger নেই */}
                   <motion.div
                     initial={{ opacity: 0, y: 24 }}
