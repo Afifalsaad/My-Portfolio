@@ -1,57 +1,44 @@
-import React, { useEffect, useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useVelocity,
-  useTransform,
-} from "framer-motion";
+import React, { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
 import IconCloud from "./IconCloud";
+
 import {
   fadeUp,
   zoomIn,
   popUp,
   staggerContainer,
   defaultViewport,
-  getVariantByIndex,
 } from "../lib/motionVariants";
 
 // ── Technology Brand Colors ──────────────────────────────────────────────────
+
 const BRAND_COLORS = {
-  javascript: "#f0dd43",
+  javascript: "#F7DF1E",
   typescript: "#3178C6",
   react: "#61DAFB",
-  nextdotjs: "#ffffff",
+  nextdotjs: "#000000",
   html5: "#E34F26",
   tailwindcss: "#06B6D4",
-  nodedotjs: "#339933",
-  express: "#828282",
+  redux: "#764ABC",
+  nodedotjs: "#5FA04E",
+  express: "#000000",
   mongodb: "#47A248",
   mysql: "#4479A1",
-  postgresql: "#4479A1",
-  firebase: "#FFCA28",
+  postgresql: "#4169E1",
+  firebase: "#DD2C00",
   git: "#F05032",
-  github: "#a0a0a0",
-  vercel: "#ffffff",
-};
-
-// Mixes each brand color with white to create a slightly lighter, solid card bg.
-const getLightBrandColor = (hex, amount = 0.9) => {
-  const normalizedHex = hex.replace("#", "");
-  const value = parseInt(normalizedHex, 16);
-
-  const red = (value >> 16) & 255;
-  const green = (value >> 8) & 255;
-  const blue = value & 255;
-
-  const mixChannel = (channel) =>
-    Math.round(channel + (255 - channel) * amount);
-
-  return `rgb(${mixChannel(red)}, ${mixChannel(green)}, ${mixChannel(blue)})`;
+  github: "#181717",
+  vercel: "#000000",
+  postman: "#FF6C37",
+  figma: "#F24E1E",
+  vscode: "#007ACC",
+  msoffice: "#D83B01",
+  skeleton: "#000000",
 };
 
 // ── Skills Data ───────────────────────────────────────────────────────────────
+
 const SKILLS = [
   {
     name: "JavaScript",
@@ -59,6 +46,23 @@ const SKILLS = [
     category: "Core",
     level: 90,
     status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
+  },
+  {
+    name: "Postman",
+    slug: "postman",
+    category: "Tools",
+    level: 90,
+    status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg",
+  },
+  {
+    name: "Figma",
+    slug: "figma",
+    category: "Tools",
+    level: 90,
+    status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
   },
   {
     name: "TypeScript",
@@ -66,6 +70,7 @@ const SKILLS = [
     category: "Core",
     level: 85,
     status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg",
   },
   {
     name: "React",
@@ -73,6 +78,7 @@ const SKILLS = [
     category: "Frontend",
     level: 92,
     status: "Expert",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
   },
   {
     name: "Next.js",
@@ -80,6 +86,7 @@ const SKILLS = [
     category: "Frontend",
     level: 88,
     status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
   },
   {
     name: "HTML5",
@@ -87,13 +94,23 @@ const SKILLS = [
     category: "Frontend",
     level: 95,
     status: "Expert",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg",
   },
   {
-    name: "Tailwind",
+    name: "Tailwind CSS",
     slug: "tailwindcss",
     category: "Frontend",
     level: 92,
     status: "Expert",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
+  },
+  {
+    name: "Redux",
+    slug: "redux",
+    category: "Frontend",
+    level: 92,
+    status: "Expert",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redux/redux-original.svg",
   },
   {
     name: "Node.js",
@@ -101,6 +118,7 @@ const SKILLS = [
     category: "Backend",
     level: 85,
     status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg",
   },
   {
     name: "Express",
@@ -108,6 +126,7 @@ const SKILLS = [
     category: "Backend",
     level: 83,
     status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg",
   },
   {
     name: "MongoDB",
@@ -115,6 +134,7 @@ const SKILLS = [
     category: "Database",
     level: 82,
     status: "Intermediate",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg",
   },
   {
     name: "MySQL",
@@ -122,6 +142,7 @@ const SKILLS = [
     category: "Database",
     level: 80,
     status: "Intermediate",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
   },
   {
     name: "PostgreSQL",
@@ -129,6 +150,7 @@ const SKILLS = [
     category: "Database",
     level: 80,
     status: "Intermediate",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
   },
   {
     name: "Firebase",
@@ -136,6 +158,7 @@ const SKILLS = [
     category: "Database",
     level: 85,
     status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg",
   },
   {
     name: "Git",
@@ -143,6 +166,7 @@ const SKILLS = [
     category: "Tools",
     level: 88,
     status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
   },
   {
     name: "GitHub",
@@ -150,6 +174,7 @@ const SKILLS = [
     category: "Tools",
     level: 90,
     status: "Expert",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg",
   },
   {
     name: "Vercel",
@@ -157,63 +182,270 @@ const SKILLS = [
     category: "Tools",
     level: 88,
     status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg",
+  },
+  {
+    name: "VS Code",
+    slug: "vscode",
+    category: "Tools",
+    level: 90,
+    status: "Advanced",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
+  },
+  {
+    name: "MS Office",
+    slug: "msoffice",
+    category: "Tools",
+    level: 90,
+    status: "Advanced",
+    logo: "https://img.icons8.com/color/48/microsoft-office-2019.png",
   },
 ];
 
 const FILTERS = ["All", "Core", "Frontend", "Backend", "Database", "Tools"];
 
+// ── Desktop Pyramid Configuration ─────────────────────────────────────────────
+
+const PYRAMID_PATTERN = [8, 6, 4, 2];
+
+const createPyramidRows = (skills) => {
+  if (!Array.isArray(skills) || skills.length === 0) {
+    return [];
+  }
+
+  const rows = [];
+
+  let currentIndex = 0;
+  let patternIndex = 0;
+
+  while (currentIndex < skills.length) {
+    const requestedRowSize =
+      PYRAMID_PATTERN[Math.min(patternIndex, PYRAMID_PATTERN.length - 1)];
+
+    const remainingSkills = skills.length - currentIndex;
+
+    const actualRowSize = Math.min(requestedRowSize, remainingSkills);
+
+    rows.push(skills.slice(currentIndex, currentIndex + actualRowSize));
+
+    currentIndex += actualRowSize;
+    patternIndex += 1;
+  }
+
+  return rows;
+};
+
+// ── Card Animation ─────────────────────────────────────────────────────────────
+
+const skillScrollCard = {
+  hidden: {
+    opacity: 0,
+    y: 36,
+    scale: 0.96,
+  },
+
+  visible: (index = 0) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+
+    transition: {
+      duration: 0.9,
+      delay: index * 0.03,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+
+  exit: {
+    opacity: 0,
+    y: 14,
+    scale: 0.98,
+
+    transition: {
+      duration: 0.14,
+      ease: "easeOut",
+    },
+  },
+};
+
+// ── Skills Component ──────────────────────────────────────────────────────────
+
 const Skills = () => {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [hoveredSkill, setHoveredSkill] = useState(null);
 
-  // Mouse coordinates tracking
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const filteredSkills = useMemo(() => {
+    if (activeFilter === "All") {
+      return SKILLS;
+    }
 
-  // Spring options for trailing lag effect
-  const springX = useSpring(mouseX, {
-    stiffness: 180,
-    damping: 22,
-    mass: 0.2,
-  });
-  const springY = useSpring(mouseY, {
-    stiffness: 180,
-    damping: 22,
-    mass: 0.2,
-  });
+    const normalizedFilter = activeFilter.trim().toLowerCase();
 
-  // Map velocity of mouse movement to card rotation/skew
-  const velocityX = useVelocity(springX);
-  const cardRotate = useTransform(velocityX, [-2000, 2000], [-10, 10]);
+    return SKILLS.filter((skill) => {
+      const normalizedCategory = skill.category.trim().toLowerCase();
 
-  // Global mouse position listener
-  useEffect(() => {
-    const handleGlobalMouseMove = (event) => {
-      mouseX.set(event.clientX - 100);
-      mouseY.set(event.clientY - 120);
-    };
+      return normalizedCategory === normalizedFilter;
+    });
+  }, [activeFilter]);
 
-    window.addEventListener("mousemove", handleGlobalMouseMove);
+  const pyramidRows = useMemo(
+    () => createPyramidRows(filteredSkills),
+    [filteredSkills]
+  );
 
-    return () => {
-      window.removeEventListener("mousemove", handleGlobalMouseMove);
-    };
-  }, [mouseX, mouseY]);
+  const categoryCounts = useMemo(() => {
+    return SKILLS.reduce(
+      (counts, skill) => {
+        counts.All += 1;
 
-  const filteredSkills =
-    activeFilter === "All"
-      ? SKILLS
-      : SKILLS.filter((skill) => skill.category === activeFilter);
+        counts[skill.category] = (counts[skill.category] || 0) + 1;
 
-  const getCategoryCount = (category) =>
-    category === "All"
-      ? SKILLS.length
-      : SKILLS.filter((skill) => skill.category === category).length;
+        return counts;
+      },
+      {
+        All: 0,
+        Core: 0,
+        Frontend: 0,
+        Backend: 0,
+        Database: 0,
+        Tools: 0,
+      }
+    );
+  }, []);
+
+  const getCategoryCount = (category) => {
+    return categoryCounts[category] || 0;
+  };
+
+  const renderSkillCard = (skill, absoluteIndex, layoutType = "mobile") => {
+    const brandColor = BRAND_COLORS[skill.slug] || "#a855f7";
+
+    const isDesktopPyramid = layoutType === "desktop";
+
+    return (
+      <motion.article
+        title={skill.name}
+        key={`${skill.slug}-${absoluteIndex}`}
+        custom={absoluteIndex}
+        variants={skillScrollCard}
+        style={{
+          willChange: "transform, opacity",
+        }}>
+        <motion.div
+          whileHover={{
+            y: -2,
+            scale: 1.075,
+          }}
+          whileTap={{
+            scale: 0.97,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 200,
+            damping: 24,
+            ease: "easeInOut",
+          }}
+          style={{
+            "--skill-color": `${brandColor}90`,
+            "--skill-bg": `${brandColor}17`,
+            willChange: "transform",
+          }}
+          className={[
+            "group relative flex",
+            "cursor-none select-none",
+            "flex-col items-center justify-center",
+            "overflow-hidden rounded-md",
+            "border border-emerald-400/15",
+            "bg-white/[0.045]",
+            "px-2",
+            "shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]",
+            "backdrop-blur-sm",
+            "transition-[border-color,background-color,box-shadow]",
+            "duration-300",
+            "hover:border-emerald-300/90",
+            isDesktopPyramid
+              ? [
+                  "h-[82px] w-[82px] py-3",
+                  "xl:h-[96px] xl:w-[96px]",
+                  "2xl:h-[106px] 2xl:w-[106px]",
+                ].join(" ")
+              : [
+                  "h-[70px] w-full min-w-0 py-1.5",
+                  "sm:h-[85px] sm:py-2",
+                  "md:h-[95px] md:py-3",
+                ].join(" "),
+          ].join(" ")}>
+          {/* Technology logo */}
+          <div
+            className={[
+              "relative z-10",
+              "flex shrink-0",
+              "items-center justify-center",
+              "transition-transform duration-300",
+              "group-hover:scale-110",
+              isDesktopPyramid
+                ? [
+                    "mb-2.5 h-8 w-8",
+                    "sm:h-9 sm:w-9",
+                    "md:h-10 md:w-10",
+                    "lg:h-10 lg:w-10",
+                  ].join(" ")
+                : [
+                    "mb-1 h-7 w-7",
+                    "sm:mb-1.5 sm:h-9 sm:w-9",
+                    "md:mb-2.5 md:h-10 md:w-10",
+                  ].join(" "),
+            ].join(" ")}>
+            <img
+              src={skill.logo}
+              alt={`${skill.name} logo`}
+              className="
+              h-7 w-7 object-contain
+              opacity-80 grayscale
+              transition-all duration-300
+              group-hover:opacity-100
+              group-hover:grayscale-0
+              sm:h-8 sm:w-8
+              md:h-9 md:w-9
+              lg:h-9 lg:w-9
+            "
+            />
+          </div>
+
+          {/* Technology name */}
+          <h3
+            className="
+            relative z-10
+            block w-full min-w-0
+            truncate px-0.5
+            text-center text-[9px]
+            leading-tight
+            font-semibold tracking-tight
+            text-slate-400
+            transition-colors duration-300
+            group-hover:text-slate-100
+            dark:text-zinc-400
+            dark:group-hover:text-white
+            sm:text-[10px]
+            md:text-[11px]
+            lg:text-xs
+          ">
+            {skill.name}
+          </h3>
+        </motion.div>
+      </motion.article>
+    );
+  };
 
   return (
     <section
       id="skills"
-      className="relative z-10 border-t border-slate-200/50 pb-16 pt-12 sm:pb-24 sm:pt-20 dark:border-zinc-800/50">
+      className="
+        relative z-10
+        border-t border-slate-200/50
+        pb-16 pt-12
+        sm:pb-24 sm:pt-20
+        dark:border-zinc-800/50
+      ">
       <div className="container mx-auto px-0 md:px-2">
         {/* ── Section Header ── */}
         <motion.div
@@ -224,11 +456,23 @@ const Skills = () => {
           viewport={defaultViewport}>
           <motion.h2
             variants={zoomIn}
-            className="mb-3 text-3xl font-bold tracking-tight text-slate-100 dark:text-white md:text-5xl">
+            className="
+              mb-3 text-3xl font-bold
+              tracking-tight text-slate-100
+              dark:text-white
+              md:text-5xl
+            ">
             Technical{" "}
             <span className="relative inline-block text-primary">
               Skills
-              <span className="absolute bottom-2 left-0 -z-10 h-2.5 w-full -rotate-1 rounded-full bg-primary/20" />
+              <span
+                className="
+                  absolute bottom-2 left-0
+                  -z-10 h-2.5 w-full
+                  -rotate-1 rounded-full
+                  bg-primary/20
+                "
+              />
             </span>
           </motion.h2>
 
@@ -242,164 +486,271 @@ const Skills = () => {
 
         {/* ── Filter Tabs ── */}
         <motion.div
-          className="mb-10 flex flex-wrap items-center justify-center gap-2"
+          className="
+            mb-10 flex flex-wrap
+            items-center justify-center gap-2
+          "
           variants={popUp}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}>
-          {FILTERS.map((filter) => (
-            <motion.button
-              key={filter}
-              type="button"
-              onClick={() => setActiveFilter(filter)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={[
-                "relative flex items-center gap-1.5 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold transition-all duration-200",
-                activeFilter === filter
-                  ? "bg-slate-200 text-slate-900 dark:bg-zinc-100 dark:text-zinc-900"
-                  : "border border-white/5 bg-slate-900/20 text-slate-400 hover:bg-slate-900/40 hover:text-slate-200 dark:bg-zinc-900/20 dark:hover:bg-zinc-900/40",
-              ].join(" ")}>
-              {filter}
-              <span
+          {FILTERS.map((filter) => {
+            const isActive = activeFilter === filter;
+
+            return (
+              <motion.button
+                key={filter}
+                type="button"
+                onClick={() => setActiveFilter(filter)}
+                aria-pressed={isActive}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 className={[
-                  "rounded px-1.5 py-0.5 text-[10px] font-bold",
-                  activeFilter === filter
-                    ? "bg-slate-900/10 text-slate-900 dark:bg-zinc-900/10 dark:text-zinc-900"
-                    : "bg-slate-900/40 text-slate-500 dark:bg-zinc-900/40 dark:text-zinc-500",
+                  "relative flex items-center gap-1.5",
+                  "rounded-lg px-3 py-1.5",
+                  "text-[10px] font-semibold",
+                  "transition-all duration-200",
+                  "sm:px-4 sm:py-2 sm:text-xs",
+
+                  isActive
+                    ? [
+                        "bg-slate-200 text-slate-900",
+                        "dark:bg-zinc-100",
+                        "dark:text-zinc-900",
+                      ].join(" ")
+                    : [
+                        "border border-white/5",
+                        "bg-slate-900/20",
+                        "text-slate-400",
+                        "hover:bg-slate-900/40",
+                        "hover:text-slate-200",
+                        "dark:bg-zinc-900/20",
+                        "dark:hover:bg-zinc-900/40",
+                      ].join(" "),
                 ].join(" ")}>
-                {getCategoryCount(filter)}
-              </span>
-            </motion.button>
-          ))}
+                {filter}
+
+                <span
+                  className={[
+                    "rounded px-1.5 py-0.5",
+                    "text-[10px] font-bold",
+                    isActive
+                      ? [
+                          "bg-slate-900/10",
+                          "text-slate-900",
+                          "dark:bg-zinc-900/10",
+                          "dark:text-zinc-900",
+                        ].join(" ")
+                      : [
+                          "bg-slate-900/40",
+                          "text-slate-500",
+                          "dark:bg-zinc-900/40",
+                          "dark:text-zinc-500",
+                        ].join(" "),
+                  ].join(" ")}>
+                  {getCategoryCount(filter)}
+                </span>
+              </motion.button>
+            );
+          })}
         </motion.div>
 
         {/* ── Stats Summary Row ── */}
         <motion.div
-          className="mx-auto mb-2 flex flex-wrap justify-center gap-4 sm:gap-6 sm:justify-around max-w-2xl text-center"
+          className="
+            mx-auto mb-2
+            flex max-w-2xl flex-wrap
+            justify-center gap-4
+            text-center
+            sm:justify-around sm:gap-6
+          "
           variants={staggerContainer(0.12, 0.1)}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}>
           {[
-            { label: "Technologies", value: SKILLS.length },
+            {
+              label: "Technologies",
+              value: getCategoryCount("All"),
+            },
             {
               label: "Frontend",
-              value: SKILLS.filter((skill) => skill.category === "Frontend")
-                .length,
+              value: getCategoryCount("Frontend"),
             },
             {
               label: "Backend",
-              value: SKILLS.filter((skill) => skill.category === "Backend")
-                .length,
+              value: getCategoryCount("Backend"),
             },
             {
               label: "Databases",
-              value: SKILLS.filter((skill) => skill.category === "Database")
-                .length,
+              value: getCategoryCount("Database"),
             },
           ].map((stat) => (
             <motion.div
               key={stat.label}
               variants={popUp}
               className="mb-4 flex flex-col items-center">
-              <span className="text-2xl font-bold text-cyan-400 md:text-3xl">
+              <span
+                className="
+                  text-2xl font-bold
+                  text-cyan-400 md:text-3xl
+                ">
                 {stat.value}
               </span>
-              <span className="mt-0.5 text-[9px] font-semibold uppercase tracking-widest text-green-300">
+
+              <span
+                className="
+                  mt-0.5 text-[9px]
+                  font-semibold uppercase
+                  tracking-widest text-green-300
+                ">
                 {stat.label}
               </span>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* ── Dynamic Cursor-Follow Hover Card ── */}
-        <AnimatePresence>
-          {hoveredSkill && (
-            <motion.div
-              style={{
-                x: springX,
-                y: springY,
-                rotate: cardRotate,
-                backgroundColor: getLightBrandColor(
-                  BRAND_COLORS[hoveredSkill.slug] || "#828282",
-                  0.5
-                ),
-              }}
-              initial={{ opacity: 0, scale: 0.75 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.75 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="fixed left-0 top-0 z-[9999] hidden h-[220px] w-[200px] pointer-events-none flex-col items-center justify-between rounded-lg border border-black/10 p-4 shadow-[0_15px_40px_rgba(0,0,0,0.6)] md:flex">
-              {/* Tech Image */}
-              <div className="flex w-full flex-1 items-center justify-center">
-                <img
-                  src={`https://cdn.simpleicons.org/${hoveredSkill.slug}`}
-                  alt={hoveredSkill.name}
-                  className="h-20 w-20 object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.18)]"
-                />
-              </div>
-
-              {/* Title & Level Indicator */}
-              <div className="mt-2 w-full border-t border-black/10 pt-2">
-                <h4 className="text-sm font-bold text-slate-950">
-                  {hoveredSkill.name}
-                </h4>
-                <div className="mt-1 flex items-center justify-between text-[11px]">
-                  <span className="font-bold text-slate-900">
-                    {hoveredSkill.status}
-                  </span>
-                  <span className="font-semibold text-slate-700">
-                    {hoveredSkill.level}%
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* ── Large Size List Grid Box ── */}
+        {/* ── Skills Grid ── */}
         <div className="mx-auto w-full">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeFilter}
-              className="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-2 sm:gap-x-8 md:grid-cols-3 md:gap-x-12 lg:grid-cols-4"
-              variants={staggerContainer(0.04, 0.02)}
-              initial="hidden"
-              animate="visible">
-              {filteredSkills.map((skill, index) => (
+              initial={{
+                opacity: 0,
+                y: 18,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                y: 16,
+              }}
+              transition={{
+                duration: 0.22,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="w-full">
+              {filteredSkills.length === 0 ? (
                 <motion.div
-                  key={skill.slug}
-                  variants={getVariantByIndex(index)}
-                  className="group grid w-full cursor-none select-none grid-cols-[24px_minmax(0,120px)] items-center justify-center gap-3 py-6 transition-colors duration-300  sm:gap-6 lg:px-0">
-                  {/* Tech Logo */}
-                  <div className="flex h-6 w-6 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105">
-                    <img
-                      src={`https://cdn.simpleicons.org/${skill.slug}`}
-                      alt={skill.name}
-                      className="h-6 w-6"
-                    />
-                  </div>
-
-                  {/* Tech Title */}
-                  <div className="min-w-0">
-                    <h3
-                      onMouseEnter={() => setHoveredSkill(skill)}
-                      onMouseLeave={() => setHoveredSkill(null)}
-                      title={skill.name}
-                      className="w-full truncate text-left text-base font-bold tracking-tight text-slate-300 transition-colors duration-200 hover:cursor-pointer group-hover:text-white dark:text-zinc-200 sm:text-lg md:text-xl">
-                      {skill.name}
-                    </h3>
-                  </div>
+                  initial={{
+                    opacity: 0,
+                    y: 15,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: 15,
+                  }}
+                  transition={{
+                    duration: 0.22,
+                  }}
+                  className="
+                    flex min-h-[180px]
+                    w-full items-center
+                    justify-center text-center
+                  ">
+                  <p className="text-sm text-slate-400">
+                    No technologies were found in this category.
+                  </p>
                 </motion.div>
-              ))}
+              ) : (
+                <>
+                  {/* Mobile and Tablet Grid */}
+                  <motion.div
+                    key={`mobile-${activeFilter}`}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{
+                      once: true,
+                      amount: 0.12,
+                      margin: "0px 0px -50px 0px",
+                    }}
+                    className="
+                      grid w-full
+                      grid-cols-3 gap-2.5
+                      px-2
+                      sm:grid-cols-4 sm:gap-3
+                      sm:px-0
+                      md:grid-cols-5 md:gap-4
+                      lg:hidden
+                    ">
+                    {filteredSkills.map((skill, index) =>
+                      renderSkillCard(skill, index, "mobile")
+                    )}
+                  </motion.div>
+
+                  {/* Desktop Pyramid Grid */}
+                  <motion.div
+                    key={`desktop-${activeFilter}`}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{
+                      once: true,
+                      amount: 0.1,
+                      margin: "0px 0px -50px 0px",
+                    }}
+                    className="
+                      hidden w-full
+                      flex-col items-center
+                      gap-2.5
+                      lg:flex
+                      xl:gap-6
+                      2xl:gap-4
+                    ">
+                    {pyramidRows.map((rowSkills, rowIndex) => {
+                      const previousSkillsCount = pyramidRows
+                        .slice(0, rowIndex)
+                        .reduce(
+                          (total, previousRow) => total + previousRow.length,
+                          0
+                        );
+
+                      return (
+                        <div
+                          key={`${activeFilter}-row-${rowIndex}`}
+                          className="
+                              grid w-max max-w-full
+                              justify-center gap-2.5
+                              [grid-template-columns:repeat(var(--column-count),82px)]
+                              xl:gap-6
+                              xl:[grid-template-columns:repeat(var(--column-count),96px)]
+                              2xl:gap-4
+                              2xl:[grid-template-columns:repeat(var(--column-count),106px)]
+                            "
+                          style={{
+                            "--column-count": rowSkills.length,
+                          }}>
+                          {rowSkills.map((skill, index) =>
+                            renderSkillCard(
+                              skill,
+                              previousSkillsCount + index,
+                              "desktop"
+                            )
+                          )}
+                        </div>
+                      );
+                    })}
+                  </motion.div>
+                </>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
 
         {/* ── Icon Cloud ── */}
         <motion.div
-          className="mx-auto mt-16 flex h-[340px] max-w-xl items-center justify-center sm:h-[400px] md:h-[500px]"
+          className="
+            mx-auto mt-16 flex
+            h-[340px] max-w-xl
+            items-center justify-center
+            sm:h-[400px]
+            md:h-[500px]
+          "
           variants={zoomIn}
           initial="hidden"
           whileInView="visible"

@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import {
   motion,
   useMotionValue,
   useReducedMotion,
-  useSpring,
 } from "framer-motion";
 
-const defaultSpringConfig = {
-  damping: 30,
-  stiffness: 380,
-  mass: 0.6,
-};
-
-export function SmoothCursor({ springConfig = {} }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
-  const [hoverText, setHoverText] = useState("");
+export function SmoothCursor() {
+  const isVisibleRef = useRef(false);
+  const isHoveringRef = useRef(false);
+  const isClickingRef = useRef(false);
   const shouldReduceMotion = useReducedMotion();
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-
-  const config = {
-    ...defaultSpringConfig,
-    ...springConfig,
-  };
-
-  const trailX = useSpring(cursorX, config);
-  const trailY = useSpring(cursorY, config);
+  const cursorOpacity = useMotionValue(0);
+  const cursorScale = useMotionValue(0.8);
 
   useEffect(() => {
     const finePointer = window.matchMedia("(pointer: fine)");
@@ -37,25 +23,42 @@ export function SmoothCursor({ springConfig = {} }) {
     const moveCursor = (event) => {
       cursorX.set(event.clientX);
       cursorY.set(event.clientY);
-      setIsVisible(true);
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true;
+        cursorOpacity.set(1);
+      }
     };
 
     const handlePointerOver = (event) => {
       const target = event.target.closest(
         "a, button, input, textarea, select, [role='button'], [data-cursor-hover]"
       );
-
-      setIsHovering(Boolean(target));
-      setHoverText(target?.dataset?.cursorText || "");
+      const hovering = Boolean(target);
+      if (isHoveringRef.current !== hovering) {
+        isHoveringRef.current = hovering;
+        cursorScale.set(hovering ? 0.7 : 0.8);
+      }
     };
 
-    const handlePointerDown = () => setIsClicking(true);
-    const handlePointerUp = () => setIsClicking(false);
-    const handlePointerLeave = () => setIsVisible(false);
-    const handlePointerEnter = () => setIsVisible(true);
+    const handlePointerDown = () => {
+      isClickingRef.current = true;
+      cursorScale.set(0.78);
+    };
+    const handlePointerUp = () => {
+      isClickingRef.current = false;
+      cursorScale.set(isHoveringRef.current ? 0.7 : 0.8);
+    };
+    const handlePointerLeave = () => {
+      isVisibleRef.current = false;
+      cursorOpacity.set(0);
+    };
+    const handlePointerEnter = () => {
+      isVisibleRef.current = true;
+      cursorOpacity.set(1);
+    };
 
-    window.addEventListener("pointermove", moveCursor);
-    window.addEventListener("pointerover", handlePointerOver);
+    window.addEventListener("pointermove", moveCursor, { passive: true });
+    window.addEventListener("pointerover", handlePointerOver, { passive: true });
     window.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("pointerup", handlePointerUp);
     document.documentElement.addEventListener("mouseleave", handlePointerLeave);
@@ -75,7 +78,7 @@ export function SmoothCursor({ springConfig = {} }) {
         handlePointerEnter
       );
     };
-  }, [cursorX, cursorY]);
+  }, [cursorX, cursorY, cursorOpacity, cursorScale]);
 
   return (
     <>
@@ -119,16 +122,11 @@ export function SmoothCursor({ springConfig = {} }) {
       <motion.div
         aria-hidden="true"
         className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block"
-        style={{ x: cursorX, y: cursorY }}
-        animate={{
-          opacity: isVisible ? 1 : 0,
-          scale: isClicking ? 0.78 : isHovering ? 0.7 : 0.8,
-          rotate: isClicking ? -8 : 0,
-        }}
-        transition={{
-          opacity: { duration: 0.1 },
-          scale: { type: "spring", stiffness: 500, damping: 22 },
-          rotate: { type: "spring", stiffness: 500, damping: 22 },
+        style={{
+          x: cursorX,
+          y: cursorY,
+          opacity: cursorOpacity,
+          scale: cursorScale,
         }}>
         <svg
           width="28"
@@ -147,33 +145,8 @@ export function SmoothCursor({ springConfig = {} }) {
           />
         </svg>
 
-        {hoverText && (
-          <motion.span
-            initial={{ opacity: 0, y: 5, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 5, scale: 0.9 }}
-            className="absolute left-7 top-7 whitespace-nowrap rounded-full border border-cyan-200/25 bg-slate-950/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-cyan-100 shadow-[0_8px_25px_rgba(0,0,0,.35)] backdrop-blur-md">
-            {hoverText}
-          </motion.span>
-        )}
       </motion.div>
 
-      {/* Click ripple */}
-      {isClicking && !shouldReduceMotion && (
-        <motion.div
-          aria-hidden="true"
-          className="pointer-events-none fixed left-0 top-0 z-[9997] hidden h-8 w-8 rounded-full border border-cyan-200 md:block"
-          style={{
-            x: cursorX,
-            y: cursorY,
-            translateX: "-50%",
-            translateY: "-50%",
-          }}
-          initial={{ opacity: 0.8, scale: 0.3 }}
-          animate={{ opacity: 0, scale: 2.4 }}
-          transition={{ duration: 0.45, ease: "easeOut" }}
-        />
-      )}
     </>
   );
 }

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+"use client";
+
+import React, { useEffect, useMemo, useState } from "react";
 import { IconCloud } from "@/components/ui/icon-cloud";
 
 const slugs = [
@@ -7,8 +9,8 @@ const slugs = [
   "react",
   "html5",
   "css3",
-  "nodedotjs",
-  "nextdotjs",
+  "nodejs",
+  "nextjs",
   "npm",
   "express",
   "tailwindcss",
@@ -19,46 +21,59 @@ const slugs = [
   "postgresql",
   "vercel",
   "firebase",
+  "vscode",
+  "figma",
+  "redux",
 ];
 
+const DEVICON_BASE_URL =
+  "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons";
+
 export function IconCloudDemo() {
-  const [cloudSize, setCloudSize] = useState(500);
-  const [cloudRadius, setCloudRadius] = useState(200);
+  const [cloudSize, setCloudSize] = useState(590);
+  const [cloudRadius, setCloudRadius] = useState(220);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
+
       if (width < 480) {
-        setCloudSize(380);
+        setCloudSize(350);
         setCloudRadius(150);
       } else if (width < 640) {
-        setCloudSize(340);
-        setCloudRadius(130);
+        setCloudSize(380);
+        setCloudRadius(150);
       } else if (width < 768) {
-        setCloudSize(400);
-        setCloudRadius(160);
+        setCloudSize(450);
+        setCloudRadius(190);
       } else {
-        setCloudSize(590);
-        setCloudRadius(220);
+        setCloudSize(890);
+        setCloudRadius(380);
       }
     };
 
-    handleResize(); // Set initial size
+    handleResize();
+
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
-  const images = slugs.map(
-    (slug) => `https://cdn.simpleicons.org/${slug}/${slug}`
+  const images = useMemo(
+    () =>
+      slugs.map((slug) => `${DEVICON_BASE_URL}/${slug}/${slug}-original.svg`),
+    []
   );
 
   return (
-    <div className="relative flex items-center justify-center overflow-hidden w-full max-w-full">
+    <div className="relative flex w-full max-w-full items-center justify-center overflow-hidden">
       <IconCloud
         images={images}
         size={cloudSize}
         radius={cloudRadius}
-        className="rounded-lg max-w-full"
+        className="max-w-full rounded-lg"
       />
     </div>
   );
