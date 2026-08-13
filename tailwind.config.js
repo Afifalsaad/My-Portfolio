@@ -41,7 +41,7 @@ export default {
           foreground: "oklch(var(--card-foreground))",
         },
         "background-light": "#f6f8f7",
-        "background-dark": "#122017"
+        "background-dark": "#121212"
       },
       fontFamily: {
         display: "Metropolis",

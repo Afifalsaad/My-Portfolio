@@ -1,8 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import {
   fadeUp,
-  fadeLeft,
   zoomIn,
   popUp,
   springUp,
@@ -41,8 +40,50 @@ const contactItems = [
   },
 ];
 
-// ৩টা card এ ৩টা ভিন্ন smooth effect
+// Per-card variants
 const cardVariants = [zoomIn, popUp, springUp];
+
+// ── Per-card component with useInView for symmetric scroll animation ──────────
+const ContactCard = ({ item, index }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.35, margin: "0px 0px -50px 0px" });
+  const variant = cardVariants[index % cardVariants.length];
+
+  return (
+    <motion.a
+      ref={ref}
+      variants={variant}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className="group relative flex flex-col items-center p-8 bg-white dark:bg-gray-900/40 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-primary/50 transition-colors duration-300 hover:shadow-xl dark:hover:shadow-primary/10"
+      href={item.href}
+      target={item.target}
+      rel={item.rel}
+      whileHover={{
+        y: -7,
+        scale: 1.03,
+        transition: { type: 'spring', stiffness: 260, damping: 22 },
+      }}
+      whileTap={{ scale: 0.97 }}>
+      {/* Icon */}
+      <motion.div
+        className="w-16 h-16 mb-4 rounded-full bg-primary/10 text-primary flex items-center justify-center"
+        whileHover={{
+          scale: 1.18,
+          rotate: [0, -8, 8, -4, 0],
+          transition: { duration: 0.45 },
+        }}>
+        {item.icon}
+      </motion.div>
+
+      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{item.label}</h3>
+      <p className="text-gray-600 dark:text-gray-400 text-sm text-center">{item.sublabel}</p>
+      <span className="mt-4 text-xs font-semibold text-primary uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {item.cta}
+      </span>
+    </motion.a>
+  );
+};
 
 const Contact = () => {
   return (
@@ -72,50 +113,13 @@ const Contact = () => {
           </motion.p>
         </motion.div>
 
-        {/* Contact Cards */}
+        {/* Contact Cards — each card independently animates via useInView */}
         <div className="max-w-4xl mx-auto">
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
-            variants={staggerContainer(0.15, 0.1)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={defaultViewport}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {contactItems.map((item, index) => (
-              <motion.a
-                key={item.label}
-                className="group relative flex flex-col items-center p-8 bg-white dark:bg-gray-900/40 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-primary/50 transition-colors duration-300 hover:shadow-xl dark:hover:shadow-primary/10"
-                href={item.href}
-                target={item.target}
-                rel={item.rel}
-                variants={cardVariants[index % cardVariants.length]}
-                whileHover={{
-                  y: -7,
-                  scale: 1.03,
-                  transition: { type: 'spring', stiffness: 260, damping: 22 },
-                }}
-                whileTap={{ scale: 0.97 }}
-              >
-                {/* Icon — hovered হলে হালকা bounce */}
-                <motion.div
-                  className="w-16 h-16 mb-4 rounded-full bg-primary/10 text-primary flex items-center justify-center"
-                  whileHover={{
-                    scale: 1.18,
-                    rotate: [0, -8, 8, -4, 0],
-                    transition: { duration: 0.45 },
-                  }}
-                >
-                  {item.icon}
-                </motion.div>
-
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{item.label}</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm text-center">{item.sublabel}</p>
-                <span className="mt-4 text-xs font-semibold text-primary uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {item.cta}
-                </span>
-              </motion.a>
+              <ContactCard key={item.label} item={item} index={index} />
             ))}
-          </motion.div>
+          </div>
         </div>
 
       </div>

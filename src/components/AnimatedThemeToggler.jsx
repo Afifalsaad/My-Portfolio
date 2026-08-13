@@ -22,13 +22,7 @@ export function AnimatedThemeToggler({ className = "", duration = 400 }) {
   }, [isDark]);
 
   const toggleTheme = () => {
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        setIsDark(!isDark);
-      });
-    } else {
-      setIsDark(!isDark);
-    }
+    setIsDark((prev) => !prev);
   };
 
   return (

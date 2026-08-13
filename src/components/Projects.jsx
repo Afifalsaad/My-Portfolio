@@ -1,10 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   fadeUp,
-  fadeLeft,
-  fadeRight,
   popUp,
   zoomIn,
   springUp,
@@ -46,8 +44,61 @@ const projectsData = [
   }
 ];
 
-// ৩টা card এ ৩টা আলাদা smooth effect
+// Per-card variants
 const cardVariants = [popUp, springUp, rotateInRight];
+
+// ── Per-card component with useInView for symmetric scroll animation ──────────
+const ProjectCard = ({ project, index }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.3, margin: "0px 0px -50px 0px" });
+  const variant = cardVariants[index % cardVariants.length];
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={variant}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className="group relative flex flex-col bg-white dark:bg-gray-900/40 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-primary/50 transition-colors duration-300 hover:shadow-xl dark:hover:shadow-primary/10"
+      whileHover={{
+        y: -8,
+        scale: 1.02,
+        transition: { type: 'spring', stiffness: 260, damping: 22 },
+      }}>
+      {/* Image */}
+      <div className="relative h-48 overflow-hidden">
+        <div className="absolute inset-0 bg-gray-900/20 group-hover:bg-gray-900/0 transition-colors duration-300 z-10"></div>
+        <motion.img
+          alt={project.title}
+          className="w-full h-full object-cover"
+          src={project.image}
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="p-6 flex flex-col flex-grow">
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{project.title}</h3>
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">{project.description}</p>
+        <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+          <span className="px-2 py-1 text-[10px] uppercase tracking-wider font-semibold rounded bg-primary/10 text-primary border border-primary/20">
+            {project.category}
+          </span>
+        </div>
+        <Link
+          to={`/project/${project.id}`}
+          className="inline-flex items-center justify-center w-full px-6 py-3 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors duration-200"
+        >
+          View Details
+          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
+      </div>
+    </motion.div>
+  );
+};
 
 const Projects = () => {
   return (
@@ -77,59 +128,12 @@ const Projects = () => {
           </motion.p>
         </motion.div>
 
-        {/* Project Cards */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          variants={staggerContainer(0.16, 0.08)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={defaultViewport}
-        >
+        {/* Project Cards — each card independently animates via useInView */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projectsData.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className="group relative flex flex-col bg-white dark:bg-gray-900/40 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-primary/50 transition-colors duration-300 hover:shadow-xl dark:hover:shadow-primary/10"
-              variants={cardVariants[index % cardVariants.length]}
-              whileHover={{
-                y: -8,
-                scale: 1.02,
-                transition: { type: 'spring', stiffness: 260, damping: 22 },
-              }}
-            >
-              {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                <div className="absolute inset-0 bg-gray-900/20 group-hover:bg-gray-900/0 transition-colors duration-300 z-10"></div>
-                <motion.img
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                  src={project.image}
-                  whileHover={{ scale: 1.08 }}
-                  transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-                />
-              </div>
-
-              {/* Content */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{project.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-6 mt-auto">
-                  <span className="px-2 py-1 text-[10px] uppercase tracking-wider font-semibold rounded bg-primary/10 text-primary border border-primary/20">
-                    {project.category}
-                  </span>
-                </div>
-                <Link
-                  to={`/project/${project.title.toLowerCase().replace(' ', '-')}`}
-                  className="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white font-medium hover:bg-primary hover:text-white transition-all duration-300 group-hover:shadow-lg text-sm"
-                >
-                  View Details
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              </div>
-            </motion.div>
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
-        </motion.div>
+        </div>
 
       </div>
     </div>

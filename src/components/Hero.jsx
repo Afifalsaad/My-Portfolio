@@ -1,47 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import WavyText from "./WavyText";
 
 const Hero = () => {
-  const firstPart = "Hii, I'm";
-  const namePart = " Afif Al Saad";
-  const [showCursor, setShowCursor] = useState(true);
+  // const firstPart = "Hii, I'm";
+  // const namePart = " Afif Al Saad";
+  // const [showCursor, setShowCursor] = useState(true);
 
+  // const TYPING_SPEED = 0.2;
+  // const START_DELAY = 0.5;
 
-  const TYPING_SPEED = 0.2;
-  const START_DELAY = 0.5; 
+  // useEffect(() => {
+  //   const totalChars = firstPart.length + namePart.length;
+  //   const totalTypingTime = (totalChars * TYPING_SPEED + START_DELAY) * 1000;
 
-  useEffect(() => {
-    const totalChars = firstPart.length + namePart.length;
-    const totalTypingTime = (totalChars * TYPING_SPEED + START_DELAY) * 1000;
+  //   const timer = setTimeout(() => {
+  //     setShowCursor(false);
+  //   }, totalTypingTime + 800);
 
+  //   return () => clearTimeout(timer);
+  // }, [TYPING_SPEED, START_DELAY]);
 
-    const timer = setTimeout(() => {
-      setShowCursor(false);
-    }, totalTypingTime + 800);
+  // // Typewriter container variant
+  // const sentence = {
+  //   hidden: { opacity: 1 },
+  //   visible: {
+  //     opacity: 1,
+  //     transition: {
+  //       staggerChildren: TYPING_SPEED,
+  //       delayChildren: START_DELAY,
+  //     },
+  //   },
+  // };
 
-    return () => clearTimeout(timer);
-  }, [TYPING_SPEED, START_DELAY]);
-
-  // Typewriter container variant
-  const sentence = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: TYPING_SPEED,
-        delayChildren: START_DELAY,
-      },
-    },
-  };
-
-  // Typewriter character variant
-  const letter = {
-    hidden: { opacity: 0, display: "none" },
-    visible: {
-      opacity: 1,
-      display: "inline",
-    },
-  };
+  // // Typewriter character variant
+  // const letter = {
+  //   hidden: { opacity: 0, display: "none" },
+  //   visible: {
+  //     opacity: 1,
+  //     display: "inline",
+  //   },
+  // };
 
   // Animation variants for other elements rising from the bottom (fadeUp)
   const slideUp = {
@@ -74,7 +73,7 @@ const Hero = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-8">
       {/* Text Info */}
-      <div className="order-2 lg:order-1 space-y-4">
+      <div className="order-2 lg:order-1 space-y-4 mt-3">
         {/* Subtitle */}
         <motion.span
           variants={slideUp}
@@ -86,39 +85,7 @@ const Hero = () => {
         </motion.span>
 
         {/* Typewriter Title */}
-        <motion.h1
-          variants={sentence}
-          initial="hidden"
-          animate="visible"
-          className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight select-none">
-          {firstPart.split("").map((char, index) => (
-            <motion.span key={`first-${index}`} variants={letter}>
-              {char}
-            </motion.span>
-          ))}
-          <span className="text-primary text-glow">
-            {namePart.split("").map((char, index) => (
-              <motion.span key={`name-${index}`} variants={letter}>
-                {char}
-              </motion.span>
-            ))}
-          </span>
-          {/* Blinking Cursor with smooth hide out */}
-          <motion.span
-            animate={showCursor ? { opacity: [1, 1, 0, 0, 1] } : { opacity: 0 }}
-            transition={
-              showCursor
-                ? {
-                    duration: 0.8,
-                    repeat: Infinity,
-                    times: [0, 0.49, 0.5, 0.99, 1],
-                    ease: "linear",
-                  }
-                : { duration: 0.4, ease: "easeOut" }
-            }
-            className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 translate-y-[0.1em]"
-          />
-        </motion.h1>
+        <WavyText />
 
         {/* Description */}
         <motion.p

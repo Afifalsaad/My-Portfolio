@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import React, { useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 
 import IconCloud from "./IconCloud";
 
@@ -253,41 +253,123 @@ const createPyramidRows = (skills) => {
   return rows;
 };
 
-// ── Card Animation ─────────────────────────────────────────────────────────────
-
+// ── Skill Card Animation Variant ──────────────────────────────────────────────
 const skillScrollCard = {
-  hidden: {
+  hidden: (index = 0) => ({
     opacity: 0,
-    y: 36,
-    scale: 0.96,
-  },
-
+    y: 20,
+    scale: 0.93,
+    transition: {
+      duration: 0.28,
+      delay: index * 0.005,
+      ease: [0.55, 0, 0.75, 0.06],
+    },
+  }),
   visible: (index = 0) => ({
     opacity: 1,
     y: 0,
     scale: 1,
-
     transition: {
-      duration: 0.9,
-      delay: index * 0.03,
+      duration: 0.38,
+      delay: index * 0.012,
       ease: [0.22, 1, 0.36, 1],
     },
   }),
+};
 
-  exit: {
-    opacity: 0,
-    y: 14,
-    scale: 0.98,
+// ── Skill Card Item Component ─────────────────────────────────────────────────
+// A proper React component so we can use useRef + useInView per card.
+// This gives FULL symmetric control: same transition for appear AND disappear.
+const SkillCardItem = ({ skill, absoluteIndex, layoutType = "mobile" }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, {
+    once: false,
+    amount: 0.35,
+    margin: "0px 0px -50px 0px",
+  });
 
-    transition: {
-      duration: 0.14,
-      ease: "easeOut",
-    },
-  },
+  const brandColor = BRAND_COLORS[skill.slug] || "#a855f7";
+  const isDesktopPyramid = layoutType === "desktop";
+
+  return (
+    <motion.article
+      ref={ref}
+      title={skill.name}
+      custom={absoluteIndex}
+      variants={skillScrollCard}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      style={{ willChange: "transform, opacity" }}>
+      <motion.a
+        href={skill.website}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ y: -5, scale: 1.08 }}
+        whileTap={{ scale: 0.96 }}
+        transition={{ type: "spring", stiffness: 260, damping: 22 }}
+        style={{
+          "--skill-color": `${brandColor}90`,
+          "--skill-bg": `${brandColor}17`,
+          willChange: "transform",
+        }}
+        className={[
+          "group relative flex",
+          "flex-col items-center justify-center",
+          "overflow-hidden rounded-md",
+          "border border-emerald-400/20 dark:border-emerald-400/15",
+          "bg-black/[0.03] dark:bg-white/[0.045]",
+          "px-2",
+          "shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]",
+          "backdrop-blur-sm",
+          "transition-[border-color,background-color,box-shadow]",
+          "duration-300",
+          "hover:border-emerald-300/90",
+          isDesktopPyramid
+            ? [
+                "h-[82px] w-[82px] py-3",
+                "xl:h-[96px] xl:w-[96px]",
+                "2xl:h-[106px] 2xl:w-[106px]",
+              ].join(" ")
+            : [
+                "h-[70px] w-full min-w-0 py-1.5",
+                "sm:h-[85px] sm:py-2",
+                "md:h-[95px] md:py-3",
+              ].join(" "),
+        ].join(" ")}>
+        {/* Logo */}
+        <div
+          className={[
+            "relative z-10 flex shrink-0 items-center justify-center",
+            "transition-transform duration-300 group-hover:scale-110",
+            isDesktopPyramid
+              ? [
+                  "mb-2.5 h-8 w-8",
+                  "sm:h-9 sm:w-9",
+                  "md:h-10 md:w-10",
+                  "lg:h-10 lg:w-10",
+                ].join(" ")
+              : [
+                  "mb-1 h-7 w-7",
+                  "sm:mb-1.5 sm:h-9 sm:w-9",
+                  "md:mb-2.5 md:h-10 md:w-10",
+                ].join(" "),
+          ].join(" ")}>
+          <img
+            src={skill.logo}
+            alt={`${skill.name} logo`}
+            className="h-7 w-7 object-contain opacity-80 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 sm:h-8 sm:w-8 md:h-9 md:w-9 lg:h-9 lg:w-9"
+          />
+        </div>
+        {/* Name */}
+        <h3 className="relative z-10 block w-full min-w-0 truncate px-0.5 text-center text-[9px] leading-tight font-semibold tracking-tight text-slate-700 group-hover:text-slate-900 dark:text-zinc-400 dark:group-hover:text-white sm:text-[10px] md:text-[11px] lg:text-xs">
+          {skill.name}
+        </h3>
+      </motion.a>
+    </motion.article>
+  );
 };
 
 // ── Skills Component ──────────────────────────────────────────────────────────
-
 const Skills = () => {
   const [activeFilter, setActiveFilter] = useState("All");
 
@@ -334,129 +416,6 @@ const Skills = () => {
     return categoryCounts[category] || 0;
   };
 
-  const renderSkillCard = (skill, absoluteIndex, layoutType = "mobile") => {
-    const brandColor = BRAND_COLORS[skill.slug] || "#a855f7";
-
-    const isDesktopPyramid = layoutType === "desktop";
-
-    return (
-      <motion.article
-        title={skill.name}
-        key={`${skill.slug}-${absoluteIndex}`}
-        custom={absoluteIndex}
-        target="_blank"
-        rel="noopener noreferrer"
-        variants={skillScrollCard}
-        style={{
-          willChange: "transform, opacity",
-        }}>
-        <a href=""></a>
-        <motion.a
-          href={skill.website}
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{
-            y: -2,
-            scale: 1.075,
-          }}
-          whileTap={{
-            scale: 0.97,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 200,
-            damping: 24,
-          }}
-          style={{
-            "--skill-color": `${brandColor}90`,
-            "--skill-bg": `${brandColor}17`,
-            willChange: "transform",
-          }}
-          className={[
-            "group relative flex",
-            "flex-col items-center justify-center",
-            "overflow-hidden rounded-md",
-            "border border-emerald-400/15",
-            "bg-white/[0.045]",
-            "px-2",
-            "shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]",
-            "backdrop-blur-sm",
-            "transition-[border-color,background-color,box-shadow]",
-            "duration-300",
-            "hover:border-emerald-300/90",
-            isDesktopPyramid
-              ? [
-                  "h-[82px] w-[82px] py-3",
-                  "xl:h-[96px] xl:w-[96px]",
-                  "2xl:h-[106px] 2xl:w-[106px]",
-                ].join(" ")
-              : [
-                  "h-[70px] w-full min-w-0 py-1.5",
-                  "sm:h-[85px] sm:py-2",
-                  "md:h-[95px] md:py-3",
-                ].join(" "),
-          ].join(" ")}>
-          {/* Technology logo */}
-          <div
-            className={[
-              "relative z-10",
-              "flex shrink-0",
-              "items-center justify-center",
-              "transition-transform duration-300",
-              "group-hover:scale-110",
-              isDesktopPyramid
-                ? [
-                    "mb-2.5 h-8 w-8",
-                    "sm:h-9 sm:w-9",
-                    "md:h-10 md:w-10",
-                    "lg:h-10 lg:w-10",
-                  ].join(" ")
-                : [
-                    "mb-1 h-7 w-7",
-                    "sm:mb-1.5 sm:h-9 sm:w-9",
-                    "md:mb-2.5 md:h-10 md:w-10",
-                  ].join(" "),
-            ].join(" ")}>
-            <img
-              src={skill.logo}
-              alt={`${skill.name} logo`}
-              className="
-              h-7 w-7 object-contain
-              opacity-80 grayscale
-              transition-all duration-300
-              group-hover:opacity-100
-              group-hover:grayscale-0
-              sm:h-8 sm:w-8
-              md:h-9 md:w-9
-              lg:h-9 lg:w-9
-            "
-            />
-          </div>
-          {/* Technology name */}
-          <h3
-            className="
-            relative z-10
-            block w-full min-w-0
-            truncate px-0.5
-            text-center text-[9px]
-            leading-tight
-            font-semibold tracking-tight
-            text-slate-400
-            transition-colors duration-300
-            group-hover:text-slate-100
-            dark:text-zinc-400
-            dark:group-hover:text-white
-            sm:text-[10px]
-            md:text-[11px]
-            lg:text-xs
-          ">
-            {skill.name}
-          </h3>
-        </motion.a>
-      </motion.article>
-    );
-  };
-
   return (
     <section
       id="skills"
@@ -474,12 +433,16 @@ const Skills = () => {
           variants={staggerContainer(0.15, 0.05)}
           initial="hidden"
           whileInView="visible"
-          viewport={defaultViewport}>
+          viewport={{
+            once: false,
+            amount: 0.2,
+            margin: "0px 0px -100px 0px",
+          }}>
           <motion.h2
             variants={zoomIn}
             className="
               mb-3 text-3xl font-bold
-              tracking-tight text-slate-100
+              tracking-tight text-slate-900
               dark:text-white
               md:text-5xl
             ">
@@ -499,7 +462,7 @@ const Skills = () => {
 
           <motion.p
             variants={fadeUp}
-            className="mx-auto max-w-lg text-sm text-slate-400">
+            className="mx-auto max-w-lg text-sm text-slate-600 dark:text-slate-400">
             Interactive list grid — hover over any technology to trigger the
             cursor-follow card.
           </motion.p>
@@ -540,13 +503,11 @@ const Skills = () => {
                         "dark:text-zinc-900",
                       ].join(" ")
                     : [
-                        "border border-white/5",
-                        "bg-slate-900/20",
-                        "text-slate-400",
-                        "hover:bg-slate-900/40",
-                        "hover:text-slate-200",
-                        "dark:bg-zinc-900/20",
-                        "dark:hover:bg-zinc-900/40",
+                        "border border-slate-300/60 dark:border-white/5",
+                        "bg-slate-200/50 dark:bg-zinc-900/20",
+                        "text-slate-700 dark:text-slate-400",
+                        "hover:bg-slate-300/60 dark:hover:bg-zinc-900/40",
+                        "hover:text-slate-900 dark:hover:text-slate-200",
                       ].join(" "),
                 ].join(" ")}>
                 {filter}
@@ -614,7 +575,7 @@ const Skills = () => {
               <span
                 className="
                   text-2xl font-bold
-                  text-cyan-400 md:text-3xl
+                  text-emerald-600 dark:text-cyan-400 md:text-3xl
                 ">
                 {stat.value}
               </span>
@@ -623,7 +584,7 @@ const Skills = () => {
                 className="
                   mt-0.5 text-[9px]
                   font-semibold uppercase
-                  tracking-widest text-green-300
+                  tracking-widest text-emerald-800 dark:text-green-300
                 ">
                 {stat.label}
               </span>
@@ -682,15 +643,7 @@ const Skills = () => {
               ) : (
                 <>
                   {/* Mobile and Tablet Grid */}
-                  <motion.div
-                    key={`mobile-${activeFilter}`}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{
-                      once: true,
-                      amount: 0.12,
-                      margin: "0px 0px -50px 0px",
-                    }}
+                  <div
                     className="
                       grid w-full
                       grid-cols-3 gap-2.5
@@ -700,21 +653,18 @@ const Skills = () => {
                       md:grid-cols-5 md:gap-4
                       lg:hidden
                     ">
-                    {filteredSkills.map((skill, index) =>
-                      renderSkillCard(skill, index, "mobile")
-                    )}
-                  </motion.div>
+                    {filteredSkills.map((skill, index) => (
+                      <SkillCardItem
+                        key={`${skill.slug}-mobile-${index}`}
+                        skill={skill}
+                        absoluteIndex={index}
+                        layoutType="mobile"
+                      />
+                    ))}
+                  </div>
 
                   {/* Desktop Pyramid Grid */}
-                  <motion.div
-                    key={`desktop-${activeFilter}`}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{
-                      once: true,
-                      amount: 0.1,
-                      margin: "0px 0px -50px 0px",
-                    }}
+                  <div
                     className="
                       hidden w-full
                       flex-col items-center
@@ -746,17 +696,20 @@ const Skills = () => {
                           style={{
                             "--column-count": rowSkills.length,
                           }}>
-                          {rowSkills.map((skill, index) =>
-                            renderSkillCard(
-                              skill,
-                              previousSkillsCount + index,
-                              "desktop"
-                            )
-                          )}
+                          {rowSkills.map((skill, index) => (
+                            <SkillCardItem
+                              key={`${skill.slug}-desktop-${
+                                previousSkillsCount + index
+                              }`}
+                              skill={skill}
+                              absoluteIndex={previousSkillsCount + index}
+                              layoutType="desktop"
+                            />
+                          ))}
                         </div>
                       );
                     })}
-                  </motion.div>
+                  </div>
                 </>
               )}
             </motion.div>

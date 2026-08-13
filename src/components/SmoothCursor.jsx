@@ -64,10 +64,10 @@ export function SmoothCursor() {
     window.addEventListener("pointerover", handlePointerOver, {
       passive: true,
     });
-    window.addEventListener("pointerdown", handlePointerDown);
-    window.addEventListener("pointerup", handlePointerUp);
-    document.documentElement.addEventListener("mouseleave", handlePointerLeave);
-    document.documentElement.addEventListener("mouseenter", handlePointerEnter);
+    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
+    window.addEventListener("pointerup", handlePointerUp, { passive: true });
+    document.documentElement.addEventListener("mouseleave", handlePointerLeave, { passive: true });
+    document.documentElement.addEventListener("mouseenter", handlePointerEnter, { passive: true });
 
     return () => {
       window.removeEventListener("pointermove", moveCursor);

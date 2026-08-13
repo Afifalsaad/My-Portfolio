@@ -1,88 +1,81 @@
 // ─── Performance-first Framer Motion Variants ────────────────────────────────
-// All variants translate from bottom to top (positive y -> 0)
-// as requested: "scroll korar sathe sathe jeno niche theke ashe"
+// Symmetric: appear and disappear at the same speed
 
-const easeOut = [0.25, 0.46, 0.45, 0.94]; // smooth easeOut
-const DURATION = 0.55; 
+const easeOut = [0.25, 0.46, 0.45, 0.94];
+const DURATION = 0.45;
+// When leaving viewport (hidden), animate out quickly
+const exitTransition = { duration: 0.32, ease: [0.55, 0, 0.75, 0.06] };
 
 export const fadeUp = {
-  hidden:  { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 25, transition: exitTransition },
+  visible: { opacity: 1, y: 0,  transition: { duration: DURATION, ease: easeOut } },
 };
 
-// Formerly fadeDown, now animates from bottom (y: 35) with a slight overshoot ease
 export const fadeDown = {
-  hidden:  { opacity: 0, y: 35 },
-  visible: { opacity: 1, y: 0, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 25, transition: exitTransition },
+  visible: { opacity: 1, y: 0,  transition: { duration: DURATION, ease: easeOut } },
 };
 
-// Formerly fadeLeft, now slides from bottom (y: 45)
 export const fadeLeft = {
-  hidden:  { opacity: 0, y: 45 },
+  hidden:  { opacity: 0, y: 35, transition: exitTransition },
   visible: { opacity: 1, y: 0,  transition: { duration: DURATION, ease: easeOut } },
 };
 
-// Formerly fadeRight, now slides from bottom (y: 45)
 export const fadeRight = {
-  hidden:  { opacity: 0, y: 45 },
+  hidden:  { opacity: 0, y: 35, transition: exitTransition },
   visible: { opacity: 1, y: 0,  transition: { duration: DURATION, ease: easeOut } },
 };
 
-// scale + bottom translation (y: 30)
 export const zoomIn = {
-  hidden:  { opacity: 0, y: 30, scale: 0.9 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 28, scale: 0.92, transition: exitTransition },
+  visible: { opacity: 1, y: 0,  scale: 1,    transition: { duration: DURATION, ease: easeOut } },
 };
 
-// rotate + bottom translation (y: 32)
 export const rotateIn = {
-  hidden:  { opacity: 0, y: 32, rotate: -4, scale: 0.95 },
-  visible: { opacity: 1, y: 0, rotate: 0,  scale: 1, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 28, rotate: -4, scale: 0.95, transition: exitTransition },
+  visible: { opacity: 1, y: 0,  rotate:  0, scale:  1,   transition: { duration: DURATION, ease: easeOut } },
 };
 
-// rotate + bottom translation (y: 32)
 export const rotateInRight = {
-  hidden:  { opacity: 0, y: 32, rotate: 4, scale: 0.95 },
-  visible: { opacity: 1, y: 0, rotate: 0, scale: 1, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 28, rotate: 4, scale: 0.95, transition: exitTransition },
+  visible: { opacity: 1, y: 0,  rotate: 0, scale:  1,   transition: { duration: DURATION, ease: easeOut } },
 };
 
-// popUp (y: 28 + scale: 0.94)
 export const popUp = {
-  hidden:  { opacity: 0, y: 28, scale: 0.94 },
-  visible: { opacity: 1, y: 0,  scale: 1, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 24, scale: 0.94, transition: exitTransition },
+  visible: { opacity: 1, y: 0,  scale: 1,    transition: { duration: DURATION, ease: easeOut } },
 };
 
-// Formerly dropDown, now bottom translation (y: 30)
 export const dropDown = {
-  hidden:  { opacity: 0, y: 30, scale: 0.96 },
-  visible: { opacity: 1, y: 0,   scale: 1, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 48, scale: 0.96, transition: exitTransition },
+  visible: { opacity: 1, y: 0,  scale: 1,    transition: { duration: DURATION, ease: easeOut } },
 };
 
-// Formerly slideRotateLeft, now bottom translation + tilt (y: 36)
 export const slideRotateLeft = {
-  hidden:  { opacity: 0, y: 36, rotate: -2 },
-  visible: { opacity: 1, y: 0,   rotate: 0, transition: { duration: DURATION, ease: easeOut } },
+  hidden:  { opacity: 0, y: 30, rotate: -2, transition: exitTransition },
+  visible: { opacity: 1, y: 0,  rotate:  0, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// Formerly slideRotateRight, now bottom translation + tilt (y: 36)
 export const slideRotateRight = {
-  hidden:  { opacity: 0, y: 36, rotate: 2 },
+  hidden:  { opacity: 0, y: 30, rotate: 2, transition: exitTransition },
   visible: { opacity: 1, y: 0,  rotate: 0, transition: { duration: DURATION, ease: easeOut } },
 };
 
-// Spring bounce from bottom (y: 40)
 export const springUp = {
-  hidden:  { opacity: 0, y: 40, scale: 0.92 },
+  hidden:  { opacity: 0, y: 30, scale: 0.93, transition: exitTransition },
   visible: {
     opacity: 1, y: 0, scale: 1,
-    transition: { type: "spring", stiffness: 180, damping: 22, mass: 0.8 },
+    transition: { type: "spring", stiffness: 200, damping: 24, mass: 0.7 },
   },
 };
 
 // ── Stagger Container ─────────────────────────────────────────────────────────
-export function staggerContainer(staggerChildren = 0.1, delayChildren = 0.05) {
+// staggerDirection: -1 reverses stagger order on exit (children disappear in sequence too)
+export function staggerContainer(staggerChildren = 0.08, delayChildren = 0.02) {
   return {
-    hidden: {},
+    hidden: {
+      transition: { staggerChildren: 0.04, staggerDirection: -1 },
+    },
     visible: {
       transition: { staggerChildren, delayChildren },
     },
@@ -90,7 +83,7 @@ export function staggerContainer(staggerChildren = 0.1, delayChildren = 0.05) {
 }
 
 // ── Viewport Settings ─────────────────────────────────────────────────────────
-export const defaultViewport = { once: true, amount: 0.15 };
+export const defaultViewport = { once: false, amount: 0.35, margin: "0px 0px -100px 0px" };
 
 // ── Cards/Items Variants Array ───────────────────────────────────────────────
 export const CARD_VARIANTS = [

@@ -17,6 +17,7 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import { SmoothCursor } from "./components/SmoothCursor";
 import LoadingSpinner from "./components/LoadingSpinner";
+import FallingStarsBg from "./components/FallingStarsBg";
 
 // Lazy load route-level components
 const AboutPage = lazy(() => import("./components/AboutPage"));
@@ -26,7 +27,7 @@ const EarthCleanPage = lazy(() => import("./components/EarthCleanPage"));
 const SkillSwapPage = lazy(() => import("./components/SkillSwapPage"));
 
 const sectionReveal = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 25 },
   visible: {
     opacity: 1,
     y: 0,
@@ -34,7 +35,7 @@ const sectionReveal = {
   },
 };
 
-const viewport = { once: true, amount: 0.1 };
+const viewport = { once: false, amount: 0.35 };
 
 function AppContent() {
   const location = useLocation();
@@ -64,6 +65,7 @@ function AppContent() {
 
   return (
     <div className="font-body bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 min-h-screen relative overflow-x-hidden transition-colors duration-300 cursor-none">
+      <FallingStarsBg />
       <LoadingSpinner isLoading={isLoading} />
       <SmoothCursor />
       <Routes>
@@ -75,8 +77,7 @@ function AppContent() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4 }}>
-              <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.06] dark:opacity-[0.12] bg-stars bg-cover bg-center"></div>
-              <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent to-background-light dark:to-background-dark"></div>
+              <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent to-background-light dark:to-background-dark/80"></div>
               <Navbar />
               <main className="relative z-10 container mx-auto px-6 lg:px-12 flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16 sm:pt-16 md:pt-20 ">
                 {/* Hero — page load এ animate, scroll trigger নেই */}
@@ -92,53 +93,19 @@ function AppContent() {
                     <Hero />
                   </div>
                 </motion.div>
-                <motion.div
-                  variants={sectionReveal}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewport}>
-                  <div id="about">
-                    <About />
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  variants={sectionReveal}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewport}>
-                  <Skills />
-                </motion.div>
-
-                <motion.div
-                  variants={sectionReveal}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewport}>
-                  <div id="education">
-                    <Education />
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  variants={sectionReveal}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewport}>
-                  <div id="portfolio">
-                    <Projects />
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  variants={sectionReveal}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewport}>
-                  <div id="contact">
-                    <Contact />
-                  </div>
-                </motion.div>
+                <div id="about">
+                  <About />
+                </div>
+                <Skills />
+                <div id="education">
+                  <Education />
+                </div>
+                <div id="portfolio">
+                  <Projects />
+                </div>
+                <div id="contact">
+                  <Contact />
+                </div>
 
                 <Footer />
               </main>
