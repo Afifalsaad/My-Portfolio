@@ -101,7 +101,7 @@ const Navbar = () => {
                 scrollToSection('portfolio');
                 setIsMenuOpen(false);
               }}
-              className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg"
+              className="px-4 py-3 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors rounded-lg "
             >
               Portfolio
             </button>

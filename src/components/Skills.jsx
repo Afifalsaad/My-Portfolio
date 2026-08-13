@@ -12,7 +12,6 @@ import {
 } from "../lib/motionVariants";
 
 // ── Technology Brand Colors ──────────────────────────────────────────────────
-
 const BRAND_COLORS = {
   javascript: "#F7DF1E",
   typescript: "#3178C6",
@@ -38,7 +37,6 @@ const BRAND_COLORS = {
 };
 
 // ── Skills Data ───────────────────────────────────────────────────────────────
-
 const SKILLS = [
   {
     name: "JavaScript",
@@ -47,6 +45,7 @@ const SKILLS = [
     level: 90,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
+    website: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
   },
   {
     name: "Postman",
@@ -55,6 +54,7 @@ const SKILLS = [
     level: 90,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg",
+    website: "https://www.postman.com/",
   },
   {
     name: "Figma",
@@ -63,6 +63,7 @@ const SKILLS = [
     level: 90,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
+    website: "https://www.figma.com/",
   },
   {
     name: "TypeScript",
@@ -71,6 +72,7 @@ const SKILLS = [
     level: 85,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg",
+    website: "https://www.typescriptlang.org/",
   },
   {
     name: "React",
@@ -79,6 +81,7 @@ const SKILLS = [
     level: 92,
     status: "Expert",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg",
+    website: "https://react.dev/",
   },
   {
     name: "Next.js",
@@ -87,6 +90,7 @@ const SKILLS = [
     level: 88,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
+    website: "https://nextjs.org/",
   },
   {
     name: "HTML5",
@@ -95,6 +99,7 @@ const SKILLS = [
     level: 95,
     status: "Expert",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg",
+    website: "https://developer.mozilla.org/en-US/docs/Web/HTML",
   },
   {
     name: "Tailwind CSS",
@@ -103,6 +108,7 @@ const SKILLS = [
     level: 92,
     status: "Expert",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
+    website: "https://tailwindcss.com/",
   },
   {
     name: "Redux",
@@ -111,6 +117,7 @@ const SKILLS = [
     level: 92,
     status: "Expert",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redux/redux-original.svg",
+    website: "https://redux.js.org/",
   },
   {
     name: "Node.js",
@@ -119,6 +126,7 @@ const SKILLS = [
     level: 85,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg",
+    website: "https://nodejs.org/",
   },
   {
     name: "Express",
@@ -127,6 +135,7 @@ const SKILLS = [
     level: 83,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg",
+    website: "https://expressjs.com/",
   },
   {
     name: "MongoDB",
@@ -135,6 +144,7 @@ const SKILLS = [
     level: 82,
     status: "Intermediate",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg",
+    website: "https://www.mongodb.com/",
   },
   {
     name: "MySQL",
@@ -143,6 +153,7 @@ const SKILLS = [
     level: 80,
     status: "Intermediate",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg",
+    website: "https://www.mysql.com/",
   },
   {
     name: "PostgreSQL",
@@ -151,6 +162,7 @@ const SKILLS = [
     level: 80,
     status: "Intermediate",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg",
+    website: "https://www.postgresql.org/",
   },
   {
     name: "Firebase",
@@ -159,6 +171,7 @@ const SKILLS = [
     level: 85,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg",
+    website: "https://firebase.google.com/",
   },
   {
     name: "Git",
@@ -167,6 +180,7 @@ const SKILLS = [
     level: 88,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
+    website: "https://git-scm.com/",
   },
   {
     name: "GitHub",
@@ -175,6 +189,7 @@ const SKILLS = [
     level: 90,
     status: "Expert",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg",
+    website: "https://github.com/",
   },
   {
     name: "Vercel",
@@ -183,6 +198,7 @@ const SKILLS = [
     level: 88,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg",
+    website: "https://vercel.com/",
   },
   {
     name: "VS Code",
@@ -191,6 +207,7 @@ const SKILLS = [
     level: 90,
     status: "Advanced",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
+    website: "https://code.visualstudio.com/",
   },
   {
     name: "MS Office",
@@ -199,6 +216,7 @@ const SKILLS = [
     level: 90,
     status: "Advanced",
     logo: "https://img.icons8.com/color/48/microsoft-office-2019.png",
+    website: "https://www.microsoft.com/en-us/microsoft-365/microsoft-office",
   },
 ];
 
@@ -326,11 +344,17 @@ const Skills = () => {
         title={skill.name}
         key={`${skill.slug}-${absoluteIndex}`}
         custom={absoluteIndex}
+        target="_blank"
+        rel="noopener noreferrer"
         variants={skillScrollCard}
         style={{
           willChange: "transform, opacity",
         }}>
-        <motion.div
+        <a href=""></a>
+        <motion.a
+          href={skill.website}
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={{
             y: -2,
             scale: 1.075,
@@ -342,7 +366,6 @@ const Skills = () => {
             type: "spring",
             stiffness: 200,
             damping: 24,
-            ease: "easeInOut",
           }}
           style={{
             "--skill-color": `${brandColor}90`,
@@ -351,7 +374,6 @@ const Skills = () => {
           }}
           className={[
             "group relative flex",
-            "cursor-none select-none",
             "flex-col items-center justify-center",
             "overflow-hidden rounded-md",
             "border border-emerald-400/15",
@@ -410,7 +432,6 @@ const Skills = () => {
             "
             />
           </div>
-
           {/* Technology name */}
           <h3
             className="
@@ -431,7 +452,7 @@ const Skills = () => {
           ">
             {skill.name}
           </h3>
-        </motion.div>
+        </motion.a>
       </motion.article>
     );
   };
