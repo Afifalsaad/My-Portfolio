@@ -8,6 +8,7 @@ import {
   slideRotateLeft,
   staggerContainer,
   defaultViewport,
+  rotateInRight,
 } from "../lib/motionVariants";
 
 // ── Code line item — each line gets its own useInView ─────────────────────────
@@ -18,7 +19,7 @@ const CodeLine = ({ children, index }) => {
   return (
     <motion.div
       ref={ref}
-      variants={fadeLeft}
+      variants={popUp}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}>
       {children}
@@ -77,18 +78,27 @@ const codeLines = [
 const About = () => {
   return (
     <div className="pb-24 border-t border-gray-200 dark:border-gray-800 pt-20">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <motion.div
+        variants={popUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{
+          once: false,
+          amount: 0.2,
+          margin: "-150px 0px -150px 0px",
+        }}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Code block — left side */}
         <motion.div
           className="order-2 lg:order-1 relative group"
-          variants={fadeLeft}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.2,
-            margin: "0px 0px -100px 0px",
-          }}
+          // variants={popUp}
+          // initial="hidden"
+          // whileInView="visible"
+          // viewport={{
+          //   once: false,
+          //   amount: 0.2,
+          //   margin: "0px 0px -100px 0px",
+          // }}
           whileHover={{
             y: -6,
             scale: 1.015,
@@ -110,26 +120,23 @@ const About = () => {
                 </CodeLine>
               ))}
             </div>
-
-            <div className="absolute bottom-4 right-4 text-xs text-gray-400 dark:text-gray-600 font-sans tracking-widest opacity-20">
-              DEV.PROFILE
-            </div>
           </div>
         </motion.div>
 
         {/* Text — right side */}
         <motion.div
           className="order-1 lg:order-2 space-y-6"
-          variants={staggerContainer(0.15, 0.05)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.2,
-            margin: "0px 0px 0px 0px",
-          }}>
+          // variants={staggerContainer(0.15, 0.05)}
+          // initial="hidden"
+          // whileInView="visible"
+          // viewport={{
+          //   once: false,
+          //   amount: 0.2,
+          //   margin: "0px 0px 0px 0px",
+          // }}
+        >
           <motion.h2
-            variants={fadeRight}
+            // variants={popUp}
             className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white">
             About{" "}
             <span className="text-primary relative inline-block">
@@ -138,9 +145,7 @@ const About = () => {
             </span>
           </motion.h2>
 
-          <motion.p
-            variants={popUp}
-            className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+          <motion.p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
             My journey began over 6 months ago, fueled by an insatiable
             curiosity for how the web connects people. What started as simple
             HTML experiments has evolved into a career of architecting complex,
@@ -148,9 +153,7 @@ const About = () => {
             between sophisticated backend logic and intuitive frontend design.
           </motion.p>
 
-          <motion.p
-            variants={slideRotateLeft}
-            className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+          <motion.p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
             I thrive in dynamic environments where technology meets creativity.
             Whether optimizing server performance or crafting pixel-perfect user
             interfaces, I approach every challenge with a solution-oriented
@@ -158,7 +161,7 @@ const About = () => {
             learn and adapt to the ever-changing digital landscape.
           </motion.p>
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 };

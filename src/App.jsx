@@ -18,11 +18,14 @@ import Footer from "./components/Footer";
 import { SmoothCursor } from "./components/SmoothCursor";
 import LoadingSpinner from "./components/LoadingSpinner";
 import FallingStarsBg from "./components/FallingStarsBg";
+import { AnimatedThemeToggler } from "./components/AnimatedThemeToggler";
 
 // Lazy load route-level components
 const AboutPage = lazy(() => import("./components/AboutPage"));
 const LoginForm = lazy(() => import("./components/LoginForm"));
-const GarmentsMasterPage = lazy(() => import("./components/GarmentsMasterPage"));
+const GarmentsMasterPage = lazy(() =>
+  import("./components/GarmentsMasterPage")
+);
 const EarthCleanPage = lazy(() => import("./components/EarthCleanPage"));
 const SkillSwapPage = lazy(() => import("./components/SkillSwapPage"));
 
@@ -78,7 +81,8 @@ function AppContent() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4 }}>
               <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent to-background-light dark:to-background-dark/80"></div>
-              <Navbar />
+              {/* <Navbar /> */}
+              <AnimatedThemeToggler />
               <main className="relative z-10 container mx-auto px-6 lg:px-12 flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16 sm:pt-16 md:pt-20 ">
                 {/* Hero — page load এ animate, scroll trigger নেই */}
                 <motion.div
@@ -113,14 +117,46 @@ function AppContent() {
           }
         />
 
-        <Route path="/about" element={<Suspense fallback={null}><AboutPage /></Suspense>} />
-        <Route path="/signup" element={<Suspense fallback={null}><LoginForm /></Suspense>} />
+        <Route
+          path="/about"
+          element={
+            <Suspense fallback={null}>
+              <AboutPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <Suspense fallback={null}>
+              <LoginForm />
+            </Suspense>
+          }
+        />
         <Route
           path="/project/garments-master"
-          element={<Suspense fallback={null}><GarmentsMasterPage /></Suspense>}
+          element={
+            <Suspense fallback={null}>
+              <GarmentsMasterPage />
+            </Suspense>
+          }
         />
-        <Route path="/project/earth-clean" element={<Suspense fallback={null}><EarthCleanPage /></Suspense>} />
-        <Route path="/project/skill-swap" element={<Suspense fallback={null}><SkillSwapPage /></Suspense>} />
+        <Route
+          path="/project/earth-clean"
+          element={
+            <Suspense fallback={null}>
+              <EarthCleanPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/project/skill-swap"
+          element={
+            <Suspense fallback={null}>
+              <SkillSwapPage />
+            </Suspense>
+          }
+        />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
@@ -136,4 +172,3 @@ function App() {
 }
 
 export default App;
-

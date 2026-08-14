@@ -9,6 +9,9 @@ import {
   popUp,
   staggerContainer,
   defaultViewport,
+  slideRotateLeft,
+  fadeDown,
+  rotateInRight,
 } from "../lib/motionVariants";
 
 // ── Technology Brand Colors ──────────────────────────────────────────────────
@@ -285,7 +288,7 @@ const SkillCardItem = ({ skill, absoluteIndex, layoutType = "mobile" }) => {
   const isInView = useInView(ref, {
     once: false,
     amount: 0.35,
-    margin: "0px 0px -50px 0px",
+    margin: "-100px 0px -100px 0px",
   });
 
   const brandColor = BRAND_COLORS[skill.slug] || "#a855f7";
@@ -296,7 +299,7 @@ const SkillCardItem = ({ skill, absoluteIndex, layoutType = "mobile" }) => {
       ref={ref}
       title={skill.name}
       custom={absoluteIndex}
-      variants={skillScrollCard}
+      variants={popUp}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       style={{ willChange: "transform, opacity" }}>
@@ -429,17 +432,13 @@ const Skills = () => {
       <div className="container mx-auto px-0 md:px-2">
         {/* ── Section Header ── */}
         <motion.div
-          className="mx-auto mb-16 max-w-3xl text-center"
+          className="mx-auto  max-w-3xl text-center"
           variants={staggerContainer(0.15, 0.05)}
           initial="hidden"
           whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.2,
-            margin: "0px 0px -100px 0px",
-          }}>
+          viewport={defaultViewport}>
           <motion.h2
-            variants={zoomIn}
+            variants={popUp}
             className="
               mb-3 text-3xl font-bold
               tracking-tight text-slate-900
@@ -461,7 +460,7 @@ const Skills = () => {
           </motion.h2>
 
           <motion.p
-            variants={fadeUp}
+            variants={popUp}
             className="mx-auto max-w-lg text-sm text-slate-600 dark:text-slate-400">
             Interactive list grid — hover over any technology to trigger the
             cursor-follow card.
@@ -469,73 +468,72 @@ const Skills = () => {
         </motion.div>
 
         {/* ── Filter Tabs ── */}
-        <motion.div
-          className="
-            mb-10 flex flex-wrap
+        <div className="my-10 border-2 border-white">
+          <motion.div
+            variants={popUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={defaultViewport}
+            className="
+            flex flex-wrap
             items-center justify-center gap-2
-          "
-          variants={popUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={defaultViewport}>
-          {FILTERS.map((filter) => {
-            const isActive = activeFilter === filter;
-
-            return (
-              <motion.button
-                key={filter}
-                type="button"
-                onClick={() => setActiveFilter(filter)}
-                aria-pressed={isActive}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={[
-                  "relative flex items-center gap-1.5",
-                  "rounded-lg px-3 py-1.5",
-                  "text-[10px] font-semibold",
-                  "transition-all duration-200",
-                  "sm:px-4 sm:py-2 sm:text-xs",
-
-                  isActive
-                    ? [
-                        "bg-slate-200 text-slate-900",
-                        "dark:bg-zinc-100",
-                        "dark:text-zinc-900",
-                      ].join(" ")
-                    : [
-                        "border border-slate-300/60 dark:border-white/5",
-                        "bg-slate-200/50 dark:bg-zinc-900/20",
-                        "text-slate-700 dark:text-slate-400",
-                        "hover:bg-slate-300/60 dark:hover:bg-zinc-900/40",
-                        "hover:text-slate-900 dark:hover:text-slate-200",
-                      ].join(" "),
-                ].join(" ")}>
-                {filter}
-
-                <span
+          ">
+            {FILTERS.map((filter) => {
+              const isActive = activeFilter === filter;
+              return (
+                <motion.button
+                  key={filter}
+                  type="button"
+                  onClick={() => setActiveFilter(filter)}
+                  aria-pressed={isActive}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   className={[
-                    "rounded px-1.5 py-0.5",
-                    "text-[10px] font-bold",
+                    "relative flex items-center gap-1.5",
+                    "rounded-lg px-3 py-1.5",
+                    "text-[10px] font-semibold",
+                    "transition-all duration-200",
+                    "sm:px-4 sm:py-2 sm:text-xs",
                     isActive
                       ? [
-                          "bg-slate-900/10",
-                          "text-slate-900",
-                          "dark:bg-zinc-900/10",
+                          "bg-slate-200 text-slate-900",
+                          "dark:bg-zinc-100",
                           "dark:text-zinc-900",
                         ].join(" ")
                       : [
-                          "bg-slate-900/40",
-                          "text-slate-500",
-                          "dark:bg-zinc-900/40",
-                          "dark:text-zinc-500",
+                          "border border-slate-300/60 dark:border-white/5",
+                          "bg-slate-200/50 dark:bg-zinc-900/20",
+                          "text-slate-700 dark:text-slate-400",
+                          "hover:bg-slate-300/60 dark:hover:bg-zinc-900/40",
+                          "hover:text-slate-900 dark:hover:text-slate-200",
                         ].join(" "),
                   ].join(" ")}>
-                  {getCategoryCount(filter)}
-                </span>
-              </motion.button>
-            );
-          })}
-        </motion.div>
+                  {filter}
+                  <span
+                    className={[
+                      "rounded px-1.5 py-0.5",
+                      "text-[10px] font-bold",
+                      isActive
+                        ? [
+                            "bg-slate-900/10",
+                            "text-slate-900",
+                            "dark:bg-zinc-900/10",
+                            "dark:text-zinc-900",
+                          ].join(" ")
+                        : [
+                            "bg-slate-900/40",
+                            "text-slate-500",
+                            "dark:bg-zinc-900/40",
+                            "dark:text-zinc-500",
+                          ].join(" "),
+                    ].join(" ")}>
+                    {getCategoryCount(filter)}
+                  </span>
+                </motion.button>
+              );
+            })}
+          </motion.div>
+        </div>
 
         {/* ── Stats Summary Row ── */}
         <motion.div
@@ -546,7 +544,7 @@ const Skills = () => {
             text-center
             sm:justify-around sm:gap-6
           "
-          variants={staggerContainer(0.12, 0.1)}
+          variants={popUp}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}>
@@ -725,7 +723,7 @@ const Skills = () => {
             sm:h-[400px]
             md:h-[500px]
           "
-          variants={zoomIn}
+          variants={popUp}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}>
