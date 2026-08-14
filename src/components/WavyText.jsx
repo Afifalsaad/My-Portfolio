@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
-const firstPart = "Hii, I'm";
-const namePart = " Afif Al Saad";
+const firstPart = "Hii, I'm ";
+const namePart = "Afif Al Saad";
 const fullText = `${firstPart}${namePart}`;
 
 const sentenceVariants = {
@@ -27,7 +27,7 @@ const letterVariants = {
   },
 };
 
-export default function TypewriterText() {
+export default function WavyText() {
   return (
     <section>
       <motion.h1
@@ -37,7 +37,7 @@ export default function TypewriterText() {
         animate="visible"
         className="whitespace-nowrap text-left text-6xl font-bold tracking-tight leading-tight">
         {/* Hii, I'm */}
-        <span aria-hidden="true" className="text-[#f5f5f5]">
+        <span aria-hidden="true" className="hidden dark:inline">
           {Array.from(firstPart).map((character, index) => (
             <motion.span
               key={`first-${index}`}

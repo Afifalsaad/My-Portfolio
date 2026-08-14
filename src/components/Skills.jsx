@@ -425,8 +425,8 @@ const Skills = () => {
       className="
         relative z-10
         border-t border-slate-200/50
-        pb-16 pt-12
-        sm:pb-24 sm:pt-20
+         pt-12
+        pb-2 sm:pt-20
         dark:border-zinc-800/50
       ">
       <div className="container mx-auto px-0 md:px-2">
@@ -468,7 +468,7 @@ const Skills = () => {
         </motion.div>
 
         {/* ── Filter Tabs ── */}
-        <div className="my-10 border-2 border-white">
+        <div className="my-10">
           <motion.div
             variants={popUp}
             initial="hidden"

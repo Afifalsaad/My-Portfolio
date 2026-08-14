@@ -41,15 +41,14 @@ const EduCard = ({ edu, index }) => {
   const isInView = useInView(ref, {
     once: false,
     amount: 0.35,
-    margin: "0px 0px -50px 0px",
+    margin: "-150px 0px -150px 0px",
   });
-  const variant = cardVariants[index % cardVariants.length];
 
   return (
     <motion.div
       ref={ref}
       className="relative pl-8 border-l-2 border-gray-200 dark:border-gray-700 group"
-      variants={variant}
+      variants={popUp}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       whileHover={{
@@ -82,7 +81,7 @@ const EduCard = ({ edu, index }) => {
 
 const Education = () => {
   return (
-    <div className="pb-24 border-t border-gray-200 dark:border-gray-800 pt-20 relative z-10">
+    <div className="py-16 border-gray-200 dark:border-gray-800 relative z-10">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div
@@ -93,10 +92,10 @@ const Education = () => {
           viewport={{
             once: false,
             amount: 0.2,
-            margin: "0px 0px -100px 0px",
+            margin: "-150px 0px -150px 0px",
           }}>
           <motion.h2
-            variants={rotateIn}
+            variants={popUp}
             className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Education{" "}
             <span className="text-primary relative inline-block">
@@ -105,7 +104,7 @@ const Education = () => {
             </span>
           </motion.h2>
           <motion.p
-            variants={fadeUp}
+            variants={popUp}
             className="text-lg text-gray-600 dark:text-gray-300">
             A journey of continuous learning and academic milestones that shape
             my professional foundation.

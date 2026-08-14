@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   fadeUp,
   popUp,
@@ -9,39 +9,42 @@ import {
   rotateInRight,
   staggerContainer,
   defaultViewport,
-} from '../lib/motionVariants';
+} from "../lib/motionVariants";
 
 const projectsData = [
   {
     id: 1,
     title: "Garments Master",
-    description: "Garments Order & Production Tracker System is a web-based management platform built to help small and medium-sized garment factories efficiently handle their production workflow. The system enables factories to track buyer orders, manage different production stages such as cutting, sewing, and finishing, and monitor inventory levels to ensure smooth operations and timely delivery. The platform allows users to add, view, sell, and update product information with ease.",
+    description:
+      "Garments Order & Production Tracker System is a web-based management platform built to help small and medium-sized garment factories efficiently handle their production workflow. The system enables factories to track buyer orders, manage different production stages such as cutting, sewing, and finishing, and monitor inventory levels to ensure smooth operations and timely delivery. The platform allows users to add, view, sell, and update product information with ease.",
     goal: "To simplify garment production management, improve workflow transparency, and ensure timely delivery.",
     category: "Production Management",
     image: "/Garments Master.png",
     github: "https://github.com/Afifalsaad/garments-master",
-    live: "https://assignment11-196f4.web.app"
+    live: "https://assignment11-196f4.web.app",
   },
   {
     id: 2,
     title: "Earth Clean",
-    description: "This project is a web-based Issue Tracking and Collaboration platform designed to help users report, manage, and collaborate on issues in a transparent and organized way. Users can create and manage their own issues, contribute to others' issues through comments and updates, and work together to resolve problems efficiently.",
+    description:
+      "This project is a web-based Issue Tracking and Collaboration platform designed to help users report, manage, and collaborate on issues in a transparent and organized way. Users can create and manage their own issues, contribute to others' issues through comments and updates, and work together to resolve problems efficiently.",
     goal: "To improve communication, accountability, and collaborative problem solving.",
     category: "Productivity & Collaboration",
     image: "/Earth Clean.png",
     github: "https://github.com/Afifalsaad/earth-clean",
-    live: "https://assignment-10communitycleaning.web.app/"
+    live: "https://assignment-10communitycleaning.web.app/",
   },
   {
     id: 3,
     title: "Skill Swap",
-    description: "Skill Swap is a skill marketplace platform that allows users to discover and explore courses across a wide range of skills, purchase them easily, and learn directly from experienced instructors. The platform is designed to make knowledge sharing more accessible while enabling instructors to monetize their expertise through a simple and user-friendly interface.",
+    description:
+      "Skill Swap is a skill marketplace platform that allows users to discover and explore courses across a wide range of skills, purchase them easily, and learn directly from experienced instructors. The platform is designed to make knowledge sharing more accessible while enabling instructors to monetize their expertise through a simple and user-friendly interface.",
     goal: "To create an accessible marketplace for knowledge sharing and skill monetization.",
     category: "Education & Marketplace",
     image: "/Skill Swap.png",
     github: "https://github.com/Afifalsaad/skill-swap",
-    live: "https://assignment-9skillwrap.web.app/"
-  }
+    live: "https://assignment-9skillwrap.web.app/",
+  },
 ];
 
 // Per-card variants
@@ -50,20 +53,24 @@ const cardVariants = [popUp, springUp, rotateInRight];
 // ── Per-card component with useInView for symmetric scroll animation ──────────
 const ProjectCard = ({ project, index }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.3, margin: "0px 0px -50px 0px" });
+  const isInView = useInView(ref, {
+    once: false,
+    amount: 0.3,
+    margin: "-100px 0px -100px 0px",
+  });
   const variant = cardVariants[index % cardVariants.length];
 
   return (
     <motion.div
       ref={ref}
-      variants={variant}
+      variants={popUp}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       className="group relative flex flex-col bg-white dark:bg-gray-900/40 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-primary/50 transition-colors duration-300 hover:shadow-xl dark:hover:shadow-primary/10"
       whileHover={{
         y: -8,
         scale: 1.02,
-        transition: { type: 'spring', stiffness: 260, damping: 22 },
+        transition: { type: "spring", stiffness: 260, damping: 22 },
       }}>
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
@@ -79,8 +86,12 @@ const ProjectCard = ({ project, index }) => {
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{project.title}</h3>
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">{project.description}</p>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          {project.title}
+        </h3>
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+          {project.description}
+        </p>
         <div className="flex flex-wrap gap-2 mb-6 mt-auto">
           <span className="px-2 py-1 text-[10px] uppercase tracking-wider font-semibold rounded bg-primary/10 text-primary border border-primary/20">
             {project.category}
@@ -88,11 +99,19 @@ const ProjectCard = ({ project, index }) => {
         </div>
         <Link
           to={`/project/${project.id}`}
-          className="inline-flex items-center justify-center w-full px-6 py-3 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors duration-200"
-        >
+          className="inline-flex items-center justify-center w-full px-6 py-3 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors duration-200">
           View Details
-          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+          <svg
+            className="w-4 h-4 ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </Link>
       </div>
@@ -102,29 +121,29 @@ const ProjectCard = ({ project, index }) => {
 
 const Projects = () => {
   return (
-    <div className="pb-24 border-t border-gray-200 dark:border-gray-800 pt-20 relative z-10">
+    <div className="pb-24 relative z-10">
       <div className="container mx-auto px-4">
-
         {/* Section Header */}
         <motion.div
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-10"
           variants={staggerContainer(0.15, 0.05)}
           initial="hidden"
           whileInView="visible"
-          viewport={defaultViewport}
-        >
+          viewport={defaultViewport}>
           <motion.h2
-            variants={zoomIn}
-            className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
-          >
-            Featured{' '}
+            variants={popUp}
+            className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+            Featured{" "}
             <span className="text-primary relative inline-block">
               Projects
               <span className="absolute bottom-2 left-0 w-full h-2 bg-primary/20 -rotate-1 rounded-full -z-10"></span>
             </span>
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-lg text-gray-600 dark:text-gray-300">
-            A showcase of my recent work and technical expertise through various projects.
+          <motion.p
+            variants={popUp}
+            className="text-lg text-gray-600 dark:text-gray-300">
+            A showcase of my recent work and technical expertise through various
+            projects.
           </motion.p>
         </motion.div>
 
@@ -134,7 +153,6 @@ const Projects = () => {
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
-
       </div>
     </div>
   );
