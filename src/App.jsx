@@ -81,10 +81,9 @@ function AppContent() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4 }}>
               <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent to-background-light dark:to-background-dark/80"></div>
-              {/* <Navbar /> */}
-              <AnimatedThemeToggler />
-              <main className="relative z-10 container mx-auto px-6 lg:px-12 flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16 sm:pt-16 md:pt-20 ">
-                {/* Hero — page load এ animate, scroll trigger নেই */}
+              <Navbar></Navbar>
+              {/* <AnimatedThemeToggler /> */}
+              <main className="relative z-10 mt-8 container mx-auto px-6 lg:px-12 flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16 sm:pt-16 md:pt-20 ">
                 <motion.div
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
