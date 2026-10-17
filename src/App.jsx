@@ -82,7 +82,6 @@ function AppContent() {
               transition={{ duration: 0.4 }}>
               <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent to-background-light dark:to-background-dark/80"></div>
               <Navbar></Navbar>
-              {/* <AnimatedThemeToggler /> */}
               <main className="relative z-10 mt-8 container mx-auto px-6 lg:px-12 flex flex-col justify-center min-h-[calc(100vh-4rem)] pt-16 sm:pt-16 md:pt-20 ">
                 <motion.div
                   initial={{ opacity: 0, y: 24 }}
@@ -109,7 +108,6 @@ function AppContent() {
                 <div id="contact">
                   <Contact />
                 </div>
-
                 <Footer />
               </main>
             </motion.div>
@@ -124,14 +122,14 @@ function AppContent() {
             </Suspense>
           }
         />
-        <Route
+        {/* <Route
           path="/signup"
           element={
             <Suspense fallback={null}>
               <LoginForm />
             </Suspense>
           }
-        />
+        /> */}
         <Route
           path="/project/garments-master"
           element={

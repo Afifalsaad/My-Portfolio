@@ -102,7 +102,11 @@ export const DEFAULT_TOPICS: readonly string[] = [
 // Production Skeleton / Suspense Loading Component
 // ============================================================================
 
-export function ContactSectionSkeleton({ className }: { readonly className?: string }) {
+export function ContactSectionSkeleton({
+  className,
+}: {
+  readonly className?: string;
+}) {
   return (
     <section
       className={cn(
@@ -110,8 +114,7 @@ export function ContactSectionSkeleton({ className }: { readonly className?: str
         className
       )}
       aria-busy="true"
-      aria-label="Loading contact section"
-    >
+      aria-label="Loading contact section">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start animate-pulse">
         {/* Left Form Column Skeleton */}
         <div className="lg:col-span-7 space-y-6">
@@ -176,7 +179,9 @@ export class ContactSectionErrorBoundary extends React.Component<
     error: null,
   };
 
-  public static getDerivedStateFromError(error: Error): ContactSectionErrorBoundaryState {
+  public static getDerivedStateFromError(
+    error: Error
+  ): ContactSectionErrorBoundaryState {
     return { hasError: true, error };
   }
 
@@ -193,15 +198,17 @@ export class ContactSectionErrorBoundary extends React.Component<
       }
       return (
         <section className="w-full max-w-4xl mx-auto my-12 p-6 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-center backdrop-blur-md">
-          <h3 className="text-lg font-semibold mb-2">Unable to load the contact section</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Unable to load the contact section
+          </h3>
           <p className="text-sm opacity-90 mb-4">
-            An unexpected error occurred while rendering the form and customer quote module.
+            An unexpected error occurred while rendering the form and customer
+            quote module.
           </p>
           <button
             type="button"
             onClick={() => this.setState({ hasError: false, error: null })}
-            className="inline-flex items-center justify-center rounded-xl bg-destructive text-destructive-foreground px-4 py-2 text-sm font-medium hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
-          >
+            className="inline-flex items-center justify-center rounded-xl bg-destructive text-destructive-foreground px-4 py-2 text-sm font-medium hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2">
             Retry Section
           </button>
         </section>
@@ -240,7 +247,9 @@ export function ContactSectionWithHelpFormQuote({
     message: "",
   });
 
-  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [formStatus, setFormStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Testimonial carousel state
@@ -273,7 +282,11 @@ export function ContactSectionWithHelpFormQuote({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.message.trim()
+    ) {
       setFormStatus("error");
       setErrorMessage("Please complete all required fields before submitting.");
       return;
@@ -319,38 +332,36 @@ export function ContactSectionWithHelpFormQuote({
     <section
       aria-label="Contact and assistance section"
       className={cn(
-        "relative w-full overflow-hidden py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto",
+        "relative w-full overflow-hidden py-12 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto",
         className
-      )}
-    >
+      )}>
       {/* Subtle Teal / Mint Ambient Corner Glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-gradient-to-bl from-teal-500/15 via-emerald-500/10 to-transparent blur-3xl -z-10"
+        className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-gradient-to-bl from-teal-500/10 dark:from-teal-500/15 via-emerald-500/10 to-transparent blur-3xl -z-10"
       />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-gradient-to-tr from-cyan-500/10 via-teal-500/10 to-transparent blur-3xl -z-10"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-start">
         {/* ==================================================================
             Left Column: Help & Contact Form
             ================================================================== */}
         <div className="lg:col-span-7 flex flex-col justify-center">
           {/* Mint Pill Badge */}
           {badge && (
-            <div className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full text-xs font-semibold bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 mb-4 backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5" />
+            <div className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full text-xs font-semibold bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/20 mb-4 backdrop-blur-sm">
               <span>{badge}</span>
             </div>
           )}
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15] text-balance">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-emerald-400/80 leading-[1.15] text-balance dark:drop-shadow-[0_0_10px_#22c55e]">
             {heading}
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl text-balance">
+          <p className="mt-4 text-sm sm:text-base md:text-lg text-gray-600 dark:text-emerald-200/50 leading-relaxed max-w-2xl text-balance">
             {description}
           </p>
 
@@ -358,26 +369,27 @@ export function ContactSectionWithHelpFormQuote({
           <form
             onSubmit={handleSubmit}
             noValidate
-            className="mt-8 space-y-4"
-            aria-describedby={formStatus !== "idle" ? formFeedbackId : undefined}
-          >
+            className="mt-6 sm:mt-8 space-y-4"
+            aria-describedby={
+              formStatus !== "idle" ? formFeedbackId : undefined
+            }>
             {/* Live Feedback Banner */}
             <div
               id={formFeedbackId}
               role="status"
               aria-live="polite"
-              className="min-h-[1.5rem]"
-            >
+              className="min-h-[1.5rem]">
               <AnimatePresence mode="wait">
                 {formStatus === "success" && (
                   <motion.div
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
-                    className="flex items-center gap-2 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-medium"
-                  >
+                    className="flex items-center gap-2 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-sm font-medium">
                     <CheckCircle2 className="h-4 w-4 shrink-0" />
-                    <span>Thank you! Your message has been sent successfully.</span>
+                    <span>
+                      Thank you! Your message has been sent successfully.
+                    </span>
                   </motion.div>
                 )}
 
@@ -386,8 +398,7 @@ export function ContactSectionWithHelpFormQuote({
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
-                    className="flex items-center gap-2 p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium"
-                  >
+                    className="flex items-center gap-2 p-3.5 rounded-xl bg-red-50 dark:bg-destructive/10 border border-red-200 dark:border-destructive/20 text-red-700 dark:text-destructive text-sm font-medium">
                     <AlertCircle className="h-4 w-4 shrink-0" />
                     <span>{errorMessage}</span>
                   </motion.div>
@@ -396,12 +407,11 @@ export function ContactSectionWithHelpFormQuote({
             </div>
 
             {/* Row 1: Name and Email */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-1.5">
                 <label
                   htmlFor={nameId}
-                  className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                >
+                  className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-muted-foreground">
                   Full Name <span className="text-destructive">*</span>
                 </label>
                 <input
@@ -414,15 +424,14 @@ export function ContactSectionWithHelpFormQuote({
                     setFormData((prev) => ({ ...prev, name: e.target.value }))
                   }
                   disabled={formStatus === "submitting"}
-                  className="w-full rounded-xl bg-muted/60 dark:bg-muted/30 border border-border/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 transition-all duration-200 focus:bg-background focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 disabled:opacity-50"
+                  className="w-full appearance-none rounded-md bg-gray-200/60 dark:bg-[#285A48]/80 px-4 py-3 text-sm text-gray-900 dark:text-foreground placeholder:text-gray-500 dark:placeholder:text-muted-foreground/60 transition-all duration-200 border-none outline-none ring-0 shadow-none focus:border-none focus:outline-none focus:ring-0 focus:ring-offset-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 disabled:opacity-50"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label
                   htmlFor={emailId}
-                  className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                >
+                  className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-muted-foreground">
                   Work Email <span className="text-destructive">*</span>
                 </label>
                 <input
@@ -435,7 +444,7 @@ export function ContactSectionWithHelpFormQuote({
                     setFormData((prev) => ({ ...prev, email: e.target.value }))
                   }
                   disabled={formStatus === "submitting"}
-                  className="w-full rounded-xl bg-muted/60 dark:bg-muted/30 border border-border/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 transition-all duration-200 focus:bg-background focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 disabled:opacity-50"
+                  className="w-full appearance-none rounded-md bg-gray-200/60 dark:bg-[#285A48]/80 px-4 py-3 text-sm text-gray-900 dark:text-foreground placeholder:text-gray-500 dark:placeholder:text-muted-foreground/60 transition-all duration-200 border-none outline-none ring-0 shadow-none focus:border-none focus:outline-none focus:ring-0 focus:ring-offset-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 disabled:opacity-50"
                 />
               </div>
             </div>
@@ -445,8 +454,7 @@ export function ContactSectionWithHelpFormQuote({
               <div className="space-y-1.5">
                 <label
                   htmlFor={topicId}
-                  className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-                >
+                  className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-muted-foreground">
                   Inquiry Topic
                 </label>
                 <div className="relative">
@@ -454,18 +462,23 @@ export function ContactSectionWithHelpFormQuote({
                     id={topicId}
                     value={formData.topic}
                     onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, topic: e.target.value }))
+                      setFormData((prev) => ({
+                        ...prev,
+                        topic: e.target.value,
+                      }))
                     }
                     disabled={formStatus === "submitting"}
-                    className="w-full appearance-none rounded-xl bg-muted/60 dark:bg-muted/30 border border-border/60 px-4 py-3 text-sm text-foreground transition-all duration-200 focus:bg-background focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 disabled:opacity-50"
-                  >
+                    className="w-full appearance-none rounded-md bg-gray-200/60 dark:bg-[#285A48]/80 px-4 py-3 text-sm text-gray-900 dark:text-foreground transition-all duration-200 border-none outline-none ring-0 shadow-none focus:border-none focus:outline-none focus:ring-0 focus:ring-offset-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 disabled:opacity-50 pr-10">
                     {topics.map((t) => (
-                      <option key={t} value={t} className="bg-background text-foreground">
+                      <option
+                        key={t}
+                        value={t}
+                        className="bg-white dark:bg-[#40513B] text-gray-900 dark:text-white">
                         {t}
                       </option>
                     ))}
                   </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-muted-foreground">
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500 dark:text-muted-foreground">
                     <ChevronRight className="h-4 w-4 rotate-90" />
                   </div>
                 </div>
@@ -476,8 +489,7 @@ export function ContactSectionWithHelpFormQuote({
             <div className="space-y-1.5">
               <label
                 htmlFor={messageId}
-                className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-              >
+                className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-muted-foreground">
                 Message <span className="text-destructive">*</span>
               </label>
               <textarea
@@ -490,7 +502,7 @@ export function ContactSectionWithHelpFormQuote({
                   setFormData((prev) => ({ ...prev, message: e.target.value }))
                 }
                 disabled={formStatus === "submitting"}
-                className="w-full resize-y rounded-xl bg-muted/60 dark:bg-muted/30 border border-border/60 p-4 text-sm text-foreground placeholder:text-muted-foreground/60 transition-all duration-200 focus:bg-background focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 disabled:opacity-50 min-h-[120px]"
+                className="w-full appearance-none rounded-md bg-gray-200/60 dark:bg-[#285A48]/80 px-4 py-3 text-sm text-gray-900 dark:text-foreground placeholder:text-gray-500 dark:placeholder:text-muted-foreground/60 transition-all duration-200 border-none outline-none ring-0 shadow-none focus:border-none focus:outline-none focus:ring-0 focus:ring-offset-0 focus:shadow-none focus-visible:outline-none focus-visible:ring-0 disabled:opacity-50 min-h-[120px]"
               />
             </div>
 
@@ -500,11 +512,10 @@ export function ContactSectionWithHelpFormQuote({
                 type="submit"
                 disabled={formStatus === "submitting"}
                 className={cn(
-                  "group relative inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold shadow-md transition-all duration-200 active:scale-95",
-                  "bg-gradient-to-r from-teal-500 to-emerald-600 text-white hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2",
+                  "group relative inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold shadow-md transition-all duration-200 active:scale-95",
+                  "bg-gradient-to-r from-teal-500/90 to-emerald-600 text-white hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2",
                   "disabled:pointer-events-none disabled:opacity-60"
-                )}
-              >
+                )}>
                 {formStatus === "submitting" ? (
                   <>
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -524,19 +535,18 @@ export function ContactSectionWithHelpFormQuote({
         {/* ==================================================================
             Right Column: Interactive Glass Quote Card & Social Proof
             ================================================================== */}
-        <div className="lg:col-span-5 w-full">
+        <div className="lg:col-span-5 my-auto w-full">
           <div
             tabIndex={0}
             role="region"
             aria-roledescription="carousel"
             aria-label="Customer testimonials"
             onKeyDown={handleQuoteKeyDown}
-            className="group relative rounded-3xl bg-card/75 dark:bg-card/40 backdrop-blur-2xl border border-border/60 p-7 sm:p-9 shadow-xl shadow-teal-950/[0.04] dark:shadow-black/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
-          >
+            className="group relative rounded-3xl bg-white/80 dark:bg-[#40513B] backdrop-blur-2xl p-5 sm:p-7 md:p-9 shadow-xl shadow-gray-200/50 dark:shadow-black/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500">
             {/* Top Bar: Quote Mark + Carousel Arrows */}
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20">
-                <Quote className="h-6 w-6" />
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/20">
+                <Quote className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
 
               {/* Navigation Arrows */}
@@ -545,68 +555,58 @@ export function ContactSectionWithHelpFormQuote({
                   type="button"
                   onClick={handlePrevQuote}
                   aria-label="Previous testimonial"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/80 hover:bg-muted text-foreground transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
-                >
-                  <ChevronLeft className="h-4 w-4" />
+                  className="text-teal-700">
+                  <ChevronLeft className="h-8 w-8 font-bold text-teal-700 dark:text-teal-500" />
                 </button>
                 <button
                   type="button"
                   onClick={handleNextQuote}
                   aria-label="Next testimonial"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/80 hover:bg-muted text-foreground transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
-                >
-                  <ChevronRight className="h-4 w-4" />
+                  className="flex h-9 w-9 items-center justify-center text-foreground transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500">
+                  <ChevronRight className="h-8 w-8 font-bold text-teal-700 dark:text-teal-500" />
                 </button>
               </div>
             </div>
 
             {/* Testimonial Quote Carousel Content */}
-            <div className="relative min-h-[160px]">
+            <div className="relative h-[240px] sm:min-h-[160px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentQuoteIndex}
                   role="group"
                   aria-roledescription="slide"
-                  aria-label={`Testimonial ${currentQuoteIndex + 1} of ${totalQuotes}`}
+                  aria-label={`Testimonial ${
+                    currentQuoteIndex + 1
+                  } of ${totalQuotes}`}
                   initial={{ opacity: 0, x: 12 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -12 }}
                   transition={{ duration: 0.25, ease: "easeOut" }}
-                  className="space-y-6"
-                >
-                  {/* Rating Stars */}
-                  {currentQuote.rating && (
-                    <div className="flex items-center gap-1 text-amber-500">
-                      {Array.from({ length: currentQuote.rating }).map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-amber-500" />
-                      ))}
-                    </div>
-                  )}
-
+                  className="space-y-4 sm:space-y-6">
                   {/* Quote Body */}
-                  <blockquote className="text-base sm:text-lg font-medium leading-relaxed text-foreground tracking-tight">
+                  <blockquote className="text-sm sm:text-base lg:text-lg font-medium leading-relaxed text-gray-900 dark:text-foreground tracking-tight">
                     &ldquo;{currentQuote.quote}&rdquo;
                   </blockquote>
 
                   {/* Author Attribution */}
-                  <div className="pt-4 border-t border-border/50 flex items-center justify-between">
+                  <div className="pt-4 border-t border-gray-200/70 dark:border-t-teal-500/40 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       {currentQuote.avatarUrl ? (
                         <img
                           src={currentQuote.avatarUrl}
                           alt={currentQuote.author}
-                          className="h-11 w-11 rounded-full object-cover border border-border/50"
+                          className="h-10 w-10 sm:h-11 sm:w-11 rounded-full object-cover border border-border/50"
                         />
                       ) : (
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-tr from-teal-500 to-emerald-600 text-white font-bold text-sm shadow-sm">
+                        <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-gradient-to-tr from-teal-500 to-emerald-600 text-white font-bold text-sm shadow-sm shrink-0 ">
                           {currentQuote.author.slice(0, 1)}
                         </div>
                       )}
-                      <div>
-                        <div className="font-semibold text-sm text-foreground">
+                      <div className="max-w-25">
+                        <div className="font-semibold text-sm text-gray-900 dark:text-foreground text-wrap">
                           {currentQuote.author}
                         </div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-gray-500 dark:text-muted-foreground truncate text-wrap">
                           {currentQuote.role} &bull; {currentQuote.company}
                         </div>
                       </div>
@@ -617,7 +617,9 @@ export function ContactSectionWithHelpFormQuote({
             </div>
 
             {/* Carousel Pagination Dots */}
-            <div className="mt-8 flex items-center justify-center gap-1.5" aria-hidden="true">
+            <div
+              className="mt-6 sm:mt-8 flex items-center justify-center gap-1.5"
+              aria-hidden="true">
               {quotes.map((_, idx) => (
                 <button
                   key={idx}
@@ -626,7 +628,9 @@ export function ContactSectionWithHelpFormQuote({
                   onClick={() => setCurrentQuoteIndex(idx)}
                   className={cn(
                     "h-1.5 rounded-full transition-all duration-300",
-                    currentQuoteIndex === idx ? "w-6 bg-teal-500" : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                    currentQuoteIndex === idx
+                      ? "w-6 bg-teal-600 dark:bg-teal-500"
+                      : "w-1.5 bg-gray-300 dark:bg-muted-foreground/30 hover:bg-gray-400 dark:hover:bg-muted-foreground/50"
                   )}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
@@ -640,4 +644,3 @@ export function ContactSectionWithHelpFormQuote({
 }
 
 export default ContactSectionWithHelpFormQuote;
-

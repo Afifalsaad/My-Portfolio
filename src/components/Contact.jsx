@@ -74,8 +74,7 @@ const Contact = () => {
   return (
     <div
       id="contact"
-      className="pt-16 pb-20 border-t border-gray-200/80 dark:border-gray-800/80 relative z-10 overflow-hidden"
-    >
+      className="pt-16 pb-20 border-t border-gray-200/80 dark:border-gray-800/80 relative z-10 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Wensity Production Block with Error Boundary & Suspense */}
         <ContactSectionErrorBoundary>
@@ -98,19 +97,18 @@ const Contact = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-8 pt-8 border-t border-border/40 max-w-5xl mx-auto"
-        >
+          className="mt-8 pt-8 border-t border-border/40 max-w-5xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-muted-foreground">
                 Prefer direct communication?
               </p>
-              <p className="text-sm font-medium text-foreground">
+              <p className="text-sm font-medium text-gray-900 dark:text-foreground">
                 Reach out directly via email, phone, or instant messaging.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto">
               {directChannels.map((channel) => {
                 const Icon = channel.icon;
                 return (
@@ -119,11 +117,10 @@ const Contact = () => {
                     href={channel.href}
                     target={channel.external ? "_blank" : undefined}
                     rel={channel.external ? "noopener noreferrer" : undefined}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-muted/60 hover:bg-muted dark:bg-card/60 dark:hover:bg-card border border-border/60 text-xs font-medium text-foreground transition-all duration-200 active:scale-95 hover:border-teal-500/40"
-                  >
-                    <Icon className="h-3.5 w-3.5 text-teal-500" />
+                    className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-muted-foreground dark:bg-[#0c1c1e] hover:bg-white dark:bg-card/60 dark:hover:bg-card border border-teal-700/90 dark:border-border/60 text-xs font-medium text-gray-800 dark:text-foreground shadow-xs transition-all duration-200 active:scale-95 hover:border-teal-500/40">
+                    <Icon className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
                     <span>{channel.label}</span>
-                    <ArrowUpRight className="h-3 w-3 text-muted-foreground" />
+                    <ArrowUpRight className="h-3 w-3 text-gray-400 dark:text-muted-foreground" />
                   </a>
                 );
               })}
