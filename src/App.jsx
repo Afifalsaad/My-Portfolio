@@ -19,6 +19,7 @@ import { SmoothCursor } from "./components/SmoothCursor";
 import LoadingSpinner from "./components/LoadingSpinner";
 import FallingStarsBg from "./components/FallingStarsBg";
 import { AnimatedThemeToggler } from "./components/AnimatedThemeToggler";
+import HoverImage from "./components/HoverImage";
 
 // Lazy load route-level components
 const AboutPage = lazy(() => import("./components/AboutPage"));
@@ -103,7 +104,7 @@ function AppContent() {
                   <Education />
                 </div>
                 <div id="portfolio">
-                  <Projects />
+                  <HoverImage></HoverImage>
                 </div>
                 <div id="contact">
                   <Contact />
