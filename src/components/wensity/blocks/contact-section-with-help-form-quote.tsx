@@ -332,13 +332,13 @@ export function ContactSectionWithHelpFormQuote({
     <section
       aria-label="Contact and assistance section"
       className={cn(
-        "relative w-full overflow-hidden py-12 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto",
+        "relative w-full overflow-hidden rounded-tr-xl rounded-bl-xl py-12 sm:py-20 lg:py-0 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto",
         className
       )}>
       {/* Subtle Teal / Mint Ambient Corner Glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-gradient-to-bl from-teal-500/10 dark:from-teal-500/15 via-emerald-500/10 to-transparent blur-3xl -z-10"
+        className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-gradient-to-bl from-teal-500/10 dark:from-teal-500/15 via-emerald-500/10 to-transparent blur-3xl  -z-10"
       />
       <div
         aria-hidden="true"
@@ -546,7 +546,10 @@ export function ContactSectionWithHelpFormQuote({
             {/* Top Bar: Quote Mark + Carousel Arrows */}
             <div className="flex items-center justify-between mb-6 sm:mb-8">
               <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/20">
-                <Quote className="h-5 w-5 sm:h-6 sm:w-6" />
+                {/* <Quote className="h-5 w-5 sm:h-6 sm:w-6" /> */}
+                <img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABMUlEQVR4nO2WsUoDQRCG9zprC2t9hYCVmJkE9AmSmUMEn8U38gncuUJ9BBVLK221sZCVpBAJ6l5uMxdC/g+2ne++5bi5EAAAYJFxIwOKcskmkU3uyeSdTVPYCE8KFcV6QqYPs2G/nZU8vafnuJkesOndX4NXFeLq4Ws5oigvueGlIa6eUSNDivrRZnhJiKuHou5z1Ne2w7uG+HpSqNq8q8Uh3h6K9aTdUHkemZ6d3k53l45w96RQ/ffp+3GeTm7O97oE9OIZNzLIDacon0OTw84RfXhovkkzApOrkohePDz/HcjeVF0a4u6hKI85wWwDl4a4e9j0LX9TFzulIe4e9tgX6/DwNoXwEmdtHkaIIoQRoghJCFkAIYYQRQgjRBHyDUIMIQkhhhDdnBAAAABgm/kCXFI8H+4DOWIAAAAASUVORK5CYII="
+                  alt="quote-left" className="size-6"></img>
               </div>
 
               {/* Navigation Arrows */}

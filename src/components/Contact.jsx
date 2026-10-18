@@ -72,22 +72,26 @@ const Contact = () => {
   };
 
   return (
-    <div
-      id="contact"
-      className="pt-16 pb-20 border-t border-gray-200/80 dark:border-gray-800/80 relative z-10 overflow-hidden">
+    <div id="contact" className="relative z-10 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Wensity Production Block with Error Boundary & Suspense */}
         <ContactSectionErrorBoundary>
           <Suspense fallback={<ContactSectionSkeleton />}>
-            <ContactSectionWithHelpFormQuote
-              badge="Let's Connect"
-              heading="Ready to build your next project together?"
-              description="Have an idea for a web platform, need full-stack architecture support, or want to discuss an exciting opportunity? Send a message and let's bring it to life."
-              quotes={portfolioQuotes}
-              topics={inquiryTopics}
-              onSubmit={handleFormSubmit}
-              className="py-6 sm:py-10"
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}>
+              <ContactSectionWithHelpFormQuote
+                badge="Let's Connect"
+                heading="Ready to build your next project together?"
+                description="Have an idea for a web platform, need full-stack architecture support, or want to discuss an exciting opportunity? Send a message and let's bring it to life."
+                quotes={portfolioQuotes}
+                topics={inquiryTopics}
+                onSubmit={handleFormSubmit}
+                className="py-6 sm:py-10"
+              />
+            </motion.div>
           </Suspense>
         </ContactSectionErrorBoundary>
 
@@ -97,7 +101,7 @@ const Contact = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-8 pt-8 border-t border-border/40 max-w-5xl mx-auto">
+          className="mb-8 py-8 border-b border-teal-300/40 max-w-5xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-muted-foreground">
