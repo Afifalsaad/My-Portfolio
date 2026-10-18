@@ -332,7 +332,7 @@ export function ContactSectionWithHelpFormQuote({
     <section
       aria-label="Contact and assistance section"
       className={cn(
-        "relative w-full overflow-hidden rounded-tr-xl rounded-bl-xl py-12 sm:py-20 lg:py-0 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto",
+        "relative w-full overflow-hidden rounded-tr-xl rounded-bl-xl py-12 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto",
         className
       )}>
       {/* Subtle Teal / Mint Ambient Corner Glow */}
