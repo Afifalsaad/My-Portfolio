@@ -17,30 +17,33 @@ const STACK = {
 } as const;
 
 const FAN = {
-  x: 84,
-  y: 8,
-  rotate: 5.5,
-  scale: 0.92,
+  x: 120,
+  y: 14,
+  rotate: 8,
+  scale: 0.9,
 } as const;
 
-/** Smooth deck motion — low bounce, interruptible spring. */
+/** Smooth deck motion — slow, buttery spring with no bounce. */
 const DECK_SPRING = {
   type: "spring" as const,
-  stiffness: 260,
-  damping: 28,
-  mass: 0.85,
+  stiffness: 140,
+  damping: 22,
+  mass: 1.1,
 };
 
-/** Opacity settles a touch faster than position so crossfades stay clean. */
+/** Opacity fades in sync with the card travel. */
 const OPACITY_SPRING = {
   type: "spring" as const,
-  stiffness: 320,
-  damping: 34,
-  mass: 0.7,
+  stiffness: 160,
+  damping: 24,
+  mass: 0.9,
 };
 
 function canFineHover() {
-  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+  if (
+    typeof window === "undefined" ||
+    typeof window.matchMedia !== "function"
+  ) {
     return false;
   }
   return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -52,8 +55,8 @@ function stackPose(depth: number, selected: boolean, visible: boolean) {
   const opacity = !visible
     ? 0
     : selected
-      ? 1
-      : Math.max(0.82, 1 - depth * STACK.opacityStep);
+    ? 1
+    : Math.max(0.82, 1 - depth * STACK.opacityStep);
 
   return {
     x: 0,
@@ -78,7 +81,7 @@ function fanPose(depth: number, selected: boolean, visible: boolean) {
 
   return {
     x: side * (FAN.x + (rank - 1) * 36),
-    y: FAN.y + (rank - 1) * 6,
+    y: -10 - (rank - 1) * 4,
     scale: FAN.scale - (rank - 1) * 0.03,
     rotate: side * (FAN.rotate + (rank - 1) * 2),
     opacity: Math.max(0.88, 1 - (rank - 1) * 0.06),
@@ -128,48 +131,27 @@ function TabCard({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-[1.35rem]",
+        "relative aspect-[20/10] w-[70%] mx-auto overflow-hidden rounded-[1.05rem]",
         "border border-[var(--border)] bg-[var(--background)]",
         "[box-shadow:0_1px_2px_rgba(0,0,0,.06),0_16px_36px_-18px_rgba(0,0,0,.14)]",
-        "dark:[box-shadow:0_1px_2px_rgba(0,0,0,.45),0_20px_48px_-20px_rgba(0,0,0,.75)]",
-      )}
-    >
-      {/* Photo — tiny inset from the top/sides of the card */}
-      <div className="px-1.5 pt-1.5">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-[1.05rem]">
-          <img
-            src={tab.image}
-            alt={tab.imageAlt ?? tab.title}
-            draggable={false}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          {!selected ? (
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-[var(--foreground)]"
-              style={{ opacity: Math.min(0.35, 0.08 + depth * 0.1) }}
-            />
-          ) : null}
-        </div>
-      </div>
+        "dark:[box-shadow:0_1px_2px_rgba(0,0,0,.45),0_20px_48px_-20px_rgba(0,0,0,.75)]"
+      )}>
+      <img
+        src={tab.image}
+        alt={tab.imageAlt ?? tab.title}
+        draggable={false}
+        className="absolute inset-0 h-full w-full object-cover"
+      />
 
-      {/* Copy sits in the card footer, not over the photo */}
-      <div className="flex flex-col gap-1.5 px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-3.5">
-        <h3 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)] sm:text-xl">
-          <span>{tab.label}</span>
-          <span className="mx-1.5 font-normal text-[var(--muted-foreground)]">
-            ·
-          </span>
-          <span className="font-medium text-[var(--muted-foreground)]">
-            {tab.title}
-          </span>
-        </h3>
-        {tab.description ? (
-          <p className="max-w-xl text-sm leading-relaxed text-[var(--muted-foreground)] sm:text-[15px]">
-            {tab.description}
-          </p>
-        ) : null}
-      </div>
+      {!selected && (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[var(--foreground)]"
+          style={{
+            opacity: Math.min(0.35, 0.08 + depth * 0.1),
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -191,7 +173,7 @@ export function AnimatedTabs({
   const reduceMotion = useReducedMotion();
   const isControlled = value !== undefined;
   const [uncontrolled, setUncontrolled] = React.useState(
-    () => defaultValue ?? tabs[0]?.id ?? "",
+    () => defaultValue ?? tabs[0]?.id ?? ""
   );
   const activeId = isControlled ? value : uncontrolled;
 
@@ -204,9 +186,11 @@ export function AnimatedTabs({
   });
   const activeIndex = Math.max(
     0,
-    tabs.findIndex((tab) => tab.id === activeId),
+    tabs.findIndex((tab) => tab.id === activeId)
   );
   const activeTab = tabs[activeIndex] ?? tabs[0];
+  const nextTab =
+    tabs.length > 1 ? tabs[(activeIndex + 1) % tabs.length] : undefined;
   const [fanned, setFanned] = React.useState(false);
 
   const setActive = React.useCallback(
@@ -216,7 +200,7 @@ export function AnimatedTabs({
       if (!isControlled) setUncontrolled(nextId);
       onValueChange?.(nextId);
     },
-    [activeId, isControlled, onValueChange, tabs],
+    [activeId, isControlled, onValueChange, tabs]
   );
 
   const measureClip = React.useCallback(() => {
@@ -279,22 +263,20 @@ export function AnimatedTabs({
 
   const clipPath =
     clip.width > 0 && clip.listWidth > 0
-      ? `inset(0 ${Math.max(0, clip.listWidth - clip.left - clip.width)}px 0 ${clip.left}px round 999px)`
+      ? `inset(0 ${Math.max(0, clip.listWidth - clip.left - clip.width)}px 0 ${
+          clip.left
+        }px round 999px)`
       : "inset(0 100% 0 0 round 999px)";
 
-  const deckTransition = reduceMotion
-    ? { duration: 0.01 }
-    : DECK_SPRING;
+  const deckTransition = reduceMotion ? { duration: 0.01 } : DECK_SPRING;
 
-  const opacityTransition = reduceMotion
-    ? { duration: 0.01 }
-    : OPACITY_SPRING;
+  const opacityTransition = reduceMotion ? { duration: 0.01 } : OPACITY_SPRING;
 
   const fanActive = fanned && !reduceMotion;
 
   const triggerClass = cn(
     "relative shrink-0 rounded-full px-3.5 py-1.5",
-    "text-[13px] font-medium tracking-[-0.01em] outline-none select-none",
+    "text-[13px] font-medium tracking-[-0.01em] outline-none select-none"
   );
 
   return (
@@ -307,9 +289,8 @@ export function AnimatedTabs({
           "relative z-20 mx-auto max-w-full self-center",
           "rounded-full border border-[var(--border)] p-1",
           "bg-[var(--primitive-surface-hover)]",
-          "[box-shadow:0_1px_2px_rgba(0,0,0,.06)] dark:[box-shadow:0_1px_2px_rgba(0,0,0,.35)]",
-        )}
-      >
+          "[box-shadow:0_1px_2px_rgba(0,0,0,.06)] dark:[box-shadow:0_1px_2px_rgba(0,0,0,.35)]"
+        )}>
         <div ref={listRef} className="relative grid">
           <div className="col-start-1 row-start-1 z-[1] flex min-w-0 gap-0.5">
             {tabs.map((tab) => {
@@ -336,9 +317,8 @@ export function AnimatedTabs({
                     "active:scale-[0.97]",
                     "focus-visible:ring-2 focus-visible:ring-[var(--primitive-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]",
                     "motion-reduce:transition-none motion-reduce:active:scale-100",
-                    "[@media(hover:hover)_and_(pointer:fine)]:hover:text-[var(--foreground)]",
-                  )}
-                >
+                    "[@media(hover:hover)_and_(pointer:fine)]:hover:text-[var(--foreground)]"
+                  )}>
                   {tab.label}
                 </button>
               );
@@ -347,8 +327,7 @@ export function AnimatedTabs({
 
           <div
             aria-hidden
-            className="pointer-events-none col-start-1 row-start-1 z-[2] overflow-hidden rounded-full"
-          >
+            className="pointer-events-none col-start-1 row-start-1 z-[2] overflow-hidden rounded-full">
             <div
               className="will-change-[clip-path]"
               style={{
@@ -356,17 +335,15 @@ export function AnimatedTabs({
                 transition: reduceMotion
                   ? undefined
                   : "clip-path 200ms cubic-bezier(0.23, 1, 0.32, 1)",
-              }}
-            >
+              }}>
               <div className="flex gap-0.5">
                 {tabs.map((tab) => (
                   <div
                     key={`active-${tab.id}`}
                     className={cn(
                       triggerClass,
-                      "bg-[var(--foreground)] text-[var(--background)]",
-                    )}
-                  >
+                      "bg-[var(--foreground)] text-[var(--background)]"
+                    )}>
                     {tab.label}
                   </div>
                 ))}
@@ -378,13 +355,12 @@ export function AnimatedTabs({
 
       {/* Deck — original upward stack at rest; hover fans left/right */}
       <div
-        className="relative w-full pt-9"
+        className="relative w-full px-4 sm:px-10 pt-9"
         onMouseEnter={() => {
           if (canFineHover()) setFanned(true);
         }}
-        onMouseLeave={() => setFanned(false)}
-      >
-        <div className="relative">
+        onMouseLeave={() => setFanned(false)}>
+        <div className="relative w-full">
           <div className="pointer-events-none invisible" aria-hidden>
             <TabCard tab={activeTab} depth={0} selected />
           </div>
@@ -408,7 +384,7 @@ export function AnimatedTabs({
                 id={`animated-tab-panel-${tab.id}`}
                 aria-labelledby={`animated-tab-${tab.id}`}
                 aria-hidden={!selected}
-                inert={!interactive ? true : undefined}
+                {...(!interactive ? ({ inert: true } as any) : {})}
                 initial={false}
                 animate={{
                   opacity: reduceMotion ? (selected ? 1 : 0) : pose.opacity,
@@ -428,20 +404,39 @@ export function AnimatedTabs({
                     delay: reduceMotion ? 0 : fanDelay,
                   },
                 }}
-                className={cn(
-                  "absolute inset-x-0 top-0 origin-top will-change-transform",
-                  interactive && !selected && "cursor-pointer",
-                )}
+                className="absolute inset-0 origin-top will-change-transform"
                 style={{
                   zIndex: tabs.length - depth,
-                  pointerEvents: interactive ? "auto" : "none",
-                }}
-                onClick={() => {
-                  if (!selected && fanActive) setActive(tab.id);
-                }}
-              >
+                  pointerEvents: "none",
+                }}>
                 <TabCard tab={tab} depth={depth} selected={selected} />
               </motion.div>
+            );
+          })}
+
+          {/* Transformed click overlays — one per visible rear card, matching its exact visual transform */}
+          {tabs.map((tab, index) => {
+            const depth = stackDepth(index, activeIndex, tabs.length);
+            const selected = depth === 0;
+            const visible = depth > 0 && depth < MAX_VISIBLE_DEPTH && fanActive;
+            if (!visible) return null;
+            const pose = fanPose(depth, selected, visible);
+            return (
+              <div
+                key={`click-overlay-${tab.id}`}
+                role="button"
+                aria-label={`Switch to ${tab.label}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActive(tab.id);
+                }}
+                className="absolute inset-0 origin-top cursor-pointer"
+                style={{
+                  transform: `translate(${pose.x}px, ${pose.y}px) rotate(${pose.rotate}deg) scale(${pose.scale})`,
+                  zIndex: tabs.length + 50,
+                  pointerEvents: "auto",
+                }}
+              />
             );
           })}
         </div>
