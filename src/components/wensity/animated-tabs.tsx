@@ -17,26 +17,26 @@ const STACK = {
 } as const;
 
 const FAN = {
-  x: 120,
-  y: 14,
-  rotate: 8,
-  scale: 0.9,
+  x: 84,
+  y: 8,
+  rotate: 5.5,
+  scale: 0.92,
 } as const;
 
-/** Smooth deck motion — slow, buttery spring with no bounce. */
+/** Smooth deck motion — low bounce, interruptible spring. */
 const DECK_SPRING = {
   type: "spring" as const,
-  stiffness: 140,
-  damping: 22,
-  mass: 1.1,
+  stiffness: 260,
+  damping: 28,
+  mass: 0.85,
 };
 
-/** Opacity fades in sync with the card travel. */
+/** Opacity settles a touch faster than position so crossfades stay clean. */
 const OPACITY_SPRING = {
   type: "spring" as const,
-  stiffness: 160,
-  damping: 24,
-  mass: 0.9,
+  stiffness: 320,
+  damping: 34,
+  mass: 0.7,
 };
 
 function canFineHover() {
@@ -81,7 +81,7 @@ function fanPose(depth: number, selected: boolean, visible: boolean) {
 
   return {
     x: side * (FAN.x + (rank - 1) * 36),
-    y: -10 - (rank - 1) * 4,
+    y: FAN.y + (rank - 1) * 6,
     scale: FAN.scale - (rank - 1) * 0.03,
     rotate: side * (FAN.rotate + (rank - 1) * 2),
     opacity: Math.max(0.88, 1 - (rank - 1) * 0.06),
@@ -131,27 +131,47 @@ function TabCard({
   return (
     <div
       className={cn(
-        "relative aspect-[20/10] w-[70%] mx-auto overflow-hidden rounded-[1.05rem]",
+        "overflow-hidden rounded-[1.35rem]",
         "border border-[var(--border)] bg-[var(--background)]",
         "[box-shadow:0_1px_2px_rgba(0,0,0,.06),0_16px_36px_-18px_rgba(0,0,0,.14)]",
         "dark:[box-shadow:0_1px_2px_rgba(0,0,0,.45),0_20px_48px_-20px_rgba(0,0,0,.75)]"
       )}>
-      <img
-        src={tab.image}
-        alt={tab.imageAlt ?? tab.title}
-        draggable={false}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      {/* Photo — tiny inset from the top/sides of the card */}
+      <div className="px-1.5 pt-1.5">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-[1.05rem]">
+          <img
+            src={tab.image}
+            alt={tab.imageAlt ?? tab.title}
+            draggable={false}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          {!selected ? (
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-[var(--foreground)]"
+              style={{ opacity: Math.min(0.35, 0.08 + depth * 0.1) }}
+            />
+          ) : null}
+        </div>
+      </div>
 
-      {!selected && (
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[var(--foreground)]"
-          style={{
-            opacity: Math.min(0.35, 0.08 + depth * 0.1),
-          }}
-        />
-      )}
+      {/* Copy sits in the card footer, not over the photo */}
+      <div className="flex flex-col gap-1.5 px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-3.5">
+        <h3 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)] sm:text-xl">
+          <span>{tab.label}</span>
+          <span className="mx-1.5 font-normal text-[var(--muted-foreground)]">
+            ·
+          </span>
+          <span className="font-medium text-[var(--muted-foreground)]">
+            {tab.title}
+          </span>
+        </h3>
+        {tab.description ? (
+          <p className="max-w-xl text-sm leading-relaxed text-[var(--muted-foreground)] sm:text-[15px]">
+            {tab.description}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -189,8 +209,6 @@ export function AnimatedTabs({
     tabs.findIndex((tab) => tab.id === activeId)
   );
   const activeTab = tabs[activeIndex] ?? tabs[0];
-  const nextTab =
-    tabs.length > 1 ? tabs[(activeIndex + 1) % tabs.length] : undefined;
   const [fanned, setFanned] = React.useState(false);
 
   const setActive = React.useCallback(
@@ -355,13 +373,13 @@ export function AnimatedTabs({
 
       {/* Deck — original upward stack at rest; hover fans left/right */}
       <div
-        className="relative w-full px-4 sm:px-10 pt-9"
+        className="relative w-[50%] h-[70%] mx-auto pt-9"
         onMouseEnter={() => {
           if (canFineHover()) setFanned(true);
         }}
         onMouseLeave={() => setFanned(false)}>
-        <div className="relative w-full">
-          <div className="pointer-events-none invisible" aria-hidden>
+        <div className="relative">
+          <div className="pointer-events-none invisible border-2" aria-hidden>
             <TabCard tab={activeTab} depth={0} selected />
           </div>
 
@@ -384,7 +402,7 @@ export function AnimatedTabs({
                 id={`animated-tab-panel-${tab.id}`}
                 aria-labelledby={`animated-tab-${tab.id}`}
                 aria-hidden={!selected}
-                {...(!interactive ? ({ inert: true } as any) : {})}
+                {...(!interactive && { inert: "true" })}
                 initial={false}
                 animate={{
                   opacity: reduceMotion ? (selected ? 1 : 0) : pose.opacity,
@@ -404,39 +422,19 @@ export function AnimatedTabs({
                     delay: reduceMotion ? 0 : fanDelay,
                   },
                 }}
-                className="absolute inset-0 origin-top will-change-transform"
+                className={cn(
+                  "absolute inset-x-0 top-0 origin-top will-change-transform",
+                  interactive && !selected && "cursor-pointer"
+                )}
                 style={{
                   zIndex: tabs.length - depth,
-                  pointerEvents: "none",
+                  pointerEvents: interactive ? "auto" : "none",
+                }}
+                onClick={() => {
+                  if (!selected && fanActive) setActive(tab.id);
                 }}>
                 <TabCard tab={tab} depth={depth} selected={selected} />
               </motion.div>
-            );
-          })}
-
-          {/* Transformed click overlays — one per visible rear card, matching its exact visual transform */}
-          {tabs.map((tab, index) => {
-            const depth = stackDepth(index, activeIndex, tabs.length);
-            const selected = depth === 0;
-            const visible = depth > 0 && depth < MAX_VISIBLE_DEPTH && fanActive;
-            if (!visible) return null;
-            const pose = fanPose(depth, selected, visible);
-            return (
-              <div
-                key={`click-overlay-${tab.id}`}
-                role="button"
-                aria-label={`Switch to ${tab.label}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActive(tab.id);
-                }}
-                className="absolute inset-0 origin-top cursor-pointer"
-                style={{
-                  transform: `translate(${pose.x}px, ${pose.y}px) rotate(${pose.rotate}deg) scale(${pose.scale})`,
-                  zIndex: tabs.length + 50,
-                  pointerEvents: "auto",
-                }}
-              />
             );
           })}
         </div>

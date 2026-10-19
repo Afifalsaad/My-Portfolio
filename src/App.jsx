@@ -19,7 +19,7 @@ import { SmoothCursor } from "./components/SmoothCursor";
 import LoadingSpinner from "./components/LoadingSpinner";
 import FallingStarsBg from "./components/FallingStarsBg";
 import { AnimatedThemeToggler } from "./components/AnimatedThemeToggler";
-import HoverImage from "./components/HoverImage";
+import { Works } from "./components/Works";
 
 // Lazy load route-level components
 const AboutPage = lazy(() => import("./components/AboutPage"));
@@ -28,7 +28,7 @@ const GarmentsMasterPage = lazy(() =>
   import("./components/GarmentsMasterPage")
 );
 const EarthCleanPage = lazy(() => import("./components/EarthCleanPage"));
-const SkillSwapPage = lazy(() => import("./components/SkillSwapPage"));
+const StudyAIPage = lazy(() => import("./components/StudyAIPage"));
 
 const sectionReveal = {
   hidden: { opacity: 0, y: 25 },
@@ -104,7 +104,7 @@ function AppContent() {
                   <Education />
                 </div>
                 <div id="portfolio">
-                  <HoverImage></HoverImage>
+                  <Works></Works>
                 </div>
                 <div id="contact">
                   <Contact />
@@ -148,10 +148,10 @@ function AppContent() {
           }
         />
         <Route
-          path="/project/skill-swap"
+          path="/project/study-ai"
           element={
             <Suspense fallback={null}>
-              <SkillSwapPage />
+              <StudyAIPage />
             </Suspense>
           }
         />

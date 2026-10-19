@@ -4,13 +4,14 @@ import { AnimatedTabs } from "@/components/wensity/animated-tabs";
 
 const tabs = [
   {
-    id: "paris",
-    label: "Paris",
-    title: "Iron lace at golden hour",
+    id: "study-ai",
+    label: "StudyAI",
+    title: "AI-Powered Study Assistant",
     description:
-      "The tower holds the last light while the city softens into blue.",
+      "Personalized study plans, PDF summaries, and progress tracking — all powered by Google Gemini.",
     image:
-      "https://assets.wensity.com/photos/landscape/eiffel-tower-sunset.webp",
+      "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=900&auto=format&fit=crop&q=80",
+    link: "/project/study-ai",
   },
   {
     id: "kyoto",
@@ -29,7 +30,7 @@ const tabs = [
   },
 ];
 
-export default function HoverImage() {
+export function Works() {
   const [value, setValue] = useState(tabs[0]?.id || "");
   return <AnimatedTabs tabs={tabs} value={value} onValueChange={setValue} />;
 }
