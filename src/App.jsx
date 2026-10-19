@@ -20,15 +20,18 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import FallingStarsBg from "./components/FallingStarsBg";
 import { AnimatedThemeToggler } from "./components/AnimatedThemeToggler";
 import { Works } from "./components/Works";
+import { projectsData } from "./data/projects";
+
+const garmentsMaster = projectsData.find((p) => p.slug === "garments-master");
+const earthClean = projectsData.find((p) => p.slug === "earth-clean");
+const studyAI = projectsData.find((p) => p.slug === "study-ai");
 
 // Lazy load route-level components
 const AboutPage = lazy(() => import("./components/AboutPage"));
 const LoginForm = lazy(() => import("./components/LoginForm"));
-const GarmentsMasterPage = lazy(() =>
-  import("./components/GarmentsMasterPage")
+const ProjectDetailPage = lazy(() =>
+  import("./components/ProjectDetailPage")
 );
-const EarthCleanPage = lazy(() => import("./components/EarthCleanPage"));
-const StudyAIPage = lazy(() => import("./components/StudyAIPage"));
 
 const sectionReveal = {
   hidden: { opacity: 0, y: 25 },
@@ -105,6 +108,7 @@ function AppContent() {
                 </div>
                 <div id="portfolio">
                   <Works></Works>
+                  {/* <Projects /> */}
                 </div>
                 <div id="contact">
                   <Contact />
@@ -114,7 +118,6 @@ function AppContent() {
             </motion.div>
           }
         />
-
         <Route
           path="/about"
           element={
@@ -123,19 +126,11 @@ function AppContent() {
             </Suspense>
           }
         />
-        {/* <Route
-          path="/signup"
-          element={
-            <Suspense fallback={null}>
-              <LoginForm />
-            </Suspense>
-          }
-        /> */}
         <Route
           path="/project/garments-master"
           element={
             <Suspense fallback={null}>
-              <GarmentsMasterPage />
+              <ProjectDetailPage project={garmentsMaster} />
             </Suspense>
           }
         />
@@ -143,7 +138,7 @@ function AppContent() {
           path="/project/earth-clean"
           element={
             <Suspense fallback={null}>
-              <EarthCleanPage />
+              <ProjectDetailPage project={earthClean} />
             </Suspense>
           }
         />
@@ -151,7 +146,7 @@ function AppContent() {
           path="/project/study-ai"
           element={
             <Suspense fallback={null}>
-              <StudyAIPage />
+              <ProjectDetailPage project={studyAI} />
             </Suspense>
           }
         />

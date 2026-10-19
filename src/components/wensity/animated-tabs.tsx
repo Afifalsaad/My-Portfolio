@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 /** How many cards peek behind the front card. */
@@ -95,6 +96,7 @@ export interface AnimatedTabItem {
   readonly description: string;
   readonly image: string;
   readonly imageAlt?: string;
+  readonly link?: string;
 }
 
 export interface AnimatedTabsProps {
@@ -131,19 +133,19 @@ function TabCard({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-[1.35rem]",
+        "flex flex-col overflow-hidden rounded-[1.35rem] h-[300px] sm:h-[360px] md:h-[420px] lg:h-[560px]",
         "border border-[var(--border)] bg-[var(--background)]",
         "[box-shadow:0_1px_2px_rgba(0,0,0,.06),0_16px_36px_-18px_rgba(0,0,0,.14)]",
         "dark:[box-shadow:0_1px_2px_rgba(0,0,0,.45),0_20px_48px_-20px_rgba(0,0,0,.75)]"
       )}>
       {/* Photo — tiny inset from the top/sides of the card */}
-      <div className="px-1.5 pt-1.5">
+      <div className="shrink-0 px-1.5 pt-1.5">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[1.05rem]">
           <img
             src={tab.image}
             alt={tab.imageAlt ?? tab.title}
             draggable={false}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full"
           />
           {!selected ? (
             <div
@@ -156,9 +158,16 @@ function TabCard({
       </div>
 
       {/* Copy sits in the card footer, not over the photo */}
-      <div className="flex flex-col gap-1.5 px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-3.5">
-        <h3 className="text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)] sm:text-xl">
-          <span>{tab.label}</span>
+      <div className="flex flex-1 flex-col gap-1.5 overflow-hidden px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-3.5">
+        <h3 className="line-clamp-1 text-lg font-semibold tracking-[-0.03em] text-[var(--foreground)] sm:text-xl">
+          <Link
+            to={tab.link ?? "#"}
+            className="hover:text-primary"
+            onClick={(e) => {
+              if (!tab.link) e.preventDefault();
+            }}>
+            {tab.label}
+          </Link>
           <span className="mx-1.5 font-normal text-[var(--muted-foreground)]">
             ·
           </span>
@@ -167,7 +176,7 @@ function TabCard({
           </span>
         </h3>
         {tab.description ? (
-          <p className="max-w-xl text-sm leading-relaxed text-[var(--muted-foreground)] sm:text-[15px]">
+          <p className="line-clamp-3 max-w-xl text-sm leading-relaxed text-[var(--muted-foreground)] sm:text-[15px]">
             {tab.description}
           </p>
         ) : null}
@@ -308,72 +317,11 @@ export function AnimatedTabs({
           "rounded-full border border-[var(--border)] p-1",
           "bg-[var(--primitive-surface-hover)]",
           "[box-shadow:0_1px_2px_rgba(0,0,0,.06)] dark:[box-shadow:0_1px_2px_rgba(0,0,0,.35)]"
-        )}>
-        <div ref={listRef} className="relative grid">
-          <div className="col-start-1 row-start-1 z-[1] flex min-w-0 gap-0.5">
-            {tabs.map((tab) => {
-              const selected = tab.id === activeId;
-              return (
-                <button
-                  key={tab.id}
-                  ref={(node) => {
-                    if (node) triggerRefs.current.set(tab.id, node);
-                    else triggerRefs.current.delete(tab.id);
-                  }}
-                  type="button"
-                  role="tab"
-                  id={`animated-tab-${tab.id}`}
-                  aria-selected={selected}
-                  aria-controls={`animated-tab-panel-${tab.id}`}
-                  tabIndex={selected ? 0 : -1}
-                  onClick={() => setActive(tab.id)}
-                  className={cn(
-                    triggerClass,
-                    "text-[var(--muted-foreground)]",
-                    "transition-[transform,color] duration-100",
-                    "ease-[cubic-bezier(0.23,1,0.32,1)]",
-                    "active:scale-[0.97]",
-                    "focus-visible:ring-2 focus-visible:ring-[var(--primitive-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]",
-                    "motion-reduce:transition-none motion-reduce:active:scale-100",
-                    "[@media(hover:hover)_and_(pointer:fine)]:hover:text-[var(--foreground)]"
-                  )}>
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <div
-            aria-hidden
-            className="pointer-events-none col-start-1 row-start-1 z-[2] overflow-hidden rounded-full">
-            <div
-              className="will-change-[clip-path]"
-              style={{
-                clipPath,
-                transition: reduceMotion
-                  ? undefined
-                  : "clip-path 200ms cubic-bezier(0.23, 1, 0.32, 1)",
-              }}>
-              <div className="flex gap-0.5">
-                {tabs.map((tab) => (
-                  <div
-                    key={`active-${tab.id}`}
-                    className={cn(
-                      triggerClass,
-                      "bg-[var(--foreground)] text-[var(--background)]"
-                    )}>
-                    {tab.label}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        )}></div>
 
       {/* Deck — original upward stack at rest; hover fans left/right */}
       <div
-        className="relative w-[50%] h-[70%] mx-auto pt-9"
+        className="relative w-[60%] h-[50%] mx-auto py-14"
         onMouseEnter={() => {
           if (canFineHover()) setFanned(true);
         }}

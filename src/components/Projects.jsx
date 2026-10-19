@@ -36,14 +36,14 @@ const projectsData = [
   },
   {
     id: 3,
-    title: "Skill Swap",
+    title: "StudyAI — AI-Powered Study Assistant",
     description:
-      "Skill Swap is a skill marketplace platform that allows users to discover and explore courses across a wide range of skills, purchase them easily, and learn directly from experienced instructors. The platform is designed to make knowledge sharing more accessible while enabling instructors to monetize their expertise through a simple and user-friendly interface.",
-    goal: "To create an accessible marketplace for knowledge sharing and skill monetization.",
-    category: "Education & Marketplace",
+      "StudyAI makes studying smarter and easier with AI. It lets students create a personalized study plan by providing exam name, exam date, daily study time, current preparation level, subjects, weak topics, and study goal. Users can upload a syllabus PDF (or type it manually) and the AI extracts and analyzes it to build a structured multi-phase plan. The platform also offers PDF summarization with client-side text extraction, progress tracking through a summary history sidebar, and a chat-style inbox for follow-up messages.",
+    goal: "To eliminate information overload and give every student a personalized, AI-driven roadmap to exam success.",
+    category: "AI & EdTech",
     image: "/Skill Swap.png",
     github: "https://github.com/Afifalsaad/skill-swap",
-    live: "https://assignment-9skillwrap.web.app/",
+    live: "https://studyaifrontend.netlify.app",
   },
 ];
 
@@ -98,7 +98,8 @@ const ProjectCard = ({ project, index }) => {
           </span>
         </div>
         <Link
-          to={`/project/${project.id}`}
+          // to={project.id === 3 ? "/project/study-ai" : `/project/${project.id}`}
+          to="/project/study-ai"
           className="inline-flex items-center justify-center w-full px-6 py-3 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors duration-200">
           View Details
           <svg

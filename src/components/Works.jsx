@@ -1,32 +1,35 @@
 "use client";
 import { useState } from "react";
 import { AnimatedTabs } from "@/components/wensity/animated-tabs";
+import { projectsData } from "@/data/projects";
 
 const tabs = [
   {
+    id: "garments-master",
+    label: "Garments Master",
+    title: "Production Management",
+    description:
+      "Garments Order & Production Tracker System — track buyer orders, manage cutting/sewing/finishing stages, and monitor inventory for timely delivery.",
+    image: "/Garments Master.png",
+    link: "/project/garments-master",
+  },
+  {
+    id: "earth-clean",
+    label: "Earth Clean",
+    title: "Productivity & Collaboration",
+    description:
+      "Issue Tracking and Collaboration platform — report, manage, and collaborate on issues in a transparent and organized way.",
+    image: "/Earth Clean.png",
+    link: "/project/earth-clean",
+  },
+  {
     id: "study-ai",
     label: "StudyAI",
-    title: "AI-Powered Study Assistant",
+    title: "AI & EdTech",
     description:
       "Personalized study plans, PDF summaries, and progress tracking — all powered by Google Gemini.",
-    image:
-      "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=900&auto=format&fit=crop&q=80",
+    image: "/Screenshot (188).png",
     link: "/project/study-ai",
-  },
-  {
-    id: "kyoto",
-    label: "Kyoto",
-    title: "Shrine path through cedar",
-    description: "Moss and timber lead the eye forward through soft fog.",
-    image:
-      "https://assets.wensity.com/photos/landscape/forest-shrine-path.webp",
-  },
-  {
-    id: "sahara",
-    label: "Sahara",
-    title: "Dunes catching fire",
-    description: "Wind-carved ridges glow amber, then drop into cool shadow.",
-    image: "https://assets.wensity.com/photos/landscape/dune-sunset.webp",
   },
 ];
 
